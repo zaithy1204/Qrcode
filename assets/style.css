@@ -1,0 +1,133 @@
+/* NSTW 2026 product pages - DOST-IX PSTO Zamboanga Sibugay
+   Palette sampled from the official NSTW 2026 artwork. */
+:root{
+  --navy:#1d4e89; --navy-d:#163b69; --orange:#e76332; --orange-d:#c24e22; --maroon:#9b2a1f;
+  --gold:#f2c98c; --gold-d:#e9b56a; --sky:#3d8fc6; --cream:#fff8ee;
+  --ink:#1b2430; --muted:#5b6675; --line:#e7e1d6; --card:#ffffff; --page:#f6f1e8;
+  --radius:18px; --shadow:0 10px 30px rgba(22,59,105,.10);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.55 Montserrat,"Segoe UI",Arial,sans-serif;padding-bottom:88px}
+img{max-width:100%;display:block}
+a{color:var(--navy)}
+.wrap{max-width:560px;margin:0 auto;background:var(--cream);min-height:100vh;box-shadow:0 0 0 1px var(--line)}
+.strip{height:24px;background:url("../img/nstw-strip.png") left center/auto 100% repeat-x}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:#fff}
+.top img{height:30px;width:auto}
+.top .nstw{height:34px}
+
+/* hero */
+.hero{position:relative;background:#fff}
+.hero .photo{aspect-ratio:4/3;width:100%;object-fit:cover}
+.hero .badge{position:absolute;left:16px;top:16px;background:var(--navy);color:#fff;font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border-radius:30px}
+.hero .badge b{color:var(--gold)}
+.title{padding:18px 16px 6px;background:#fff}
+.title h1{margin:0;font:400 40px/1.02 Anton,Impact,"Arial Narrow",sans-serif;text-transform:uppercase;color:var(--maroon);letter-spacing:.005em}
+.title p{margin:8px 0 0;color:var(--muted);font-weight:600}
+.title .loc{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:14px;color:var(--navy-d);font-weight:700}
+.bar{height:6px;margin:14px 16px 0;border-radius:3px;background:linear-gradient(90deg,var(--navy) 0 26%,var(--sky) 26% 44%,var(--orange) 44% 68%,var(--maroon) 68% 86%,var(--gold) 86%)}
+.titlewrap{background:#fff;padding-bottom:18px}
+
+/* sections */
+section{padding:22px 16px 6px}
+h2{margin:0 0 12px;font:800 13px/1.2 Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-d);display:flex;align-items:center;gap:10px}
+h2::after{content:"";flex:1;height:2px;background:var(--line)}
+
+/* products */
+.product{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px}
+.product .pimg{aspect-ratio:16/10;width:100%;object-fit:cover;background:#eee}
+.product .pbody{padding:14px 16px 16px}
+.product h3{margin:0;font:800 19px/1.25 Montserrat,Arial,sans-serif;color:var(--navy-d)}
+.product .size{margin:4px 0 0;color:var(--muted);font-weight:600;font-size:14px}
+.product .desc{margin:10px 0 0;font-size:15px}
+.prow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
+.price{background:var(--orange);color:#fff;border-radius:14px;padding:8px 14px;box-shadow:0 4px 0 var(--orange-d);font-weight:900;font-size:24px;line-height:1}
+.price small{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;margin-bottom:4px;opacity:.95}
+.price.ask{background:#fff;color:var(--orange-d);border:2px solid var(--orange);box-shadow:none;font-size:15px;padding:9px 12px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:700;padding:5px 10px;border-radius:20px;background:#eef4fb;color:var(--navy-d)}
+.tag.gold{background:#fdf0dc;color:#8a5a12}
+.featured{position:relative}
+.featured::before{content:"Featured at NSTW 2026";position:absolute;right:12px;top:12px;z-index:1;background:var(--gold);color:#4a3208;font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:20px}
+
+/* more products: compact list */
+.mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mini .m{background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.mini .m img{aspect-ratio:4/3;width:100%;object-fit:cover}
+.mini .m div{padding:10px 12px;font-weight:700;font-size:14px;color:var(--navy-d)}
+.mini .m span{display:block;font-weight:600;font-size:12px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:30px;padding:8px 12px;font-size:14px;font-weight:600}
+
+/* impact */
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:#fff;border-radius:16px;padding:14px;box-shadow:var(--shadow);border-top:5px solid var(--navy)}
+.stat:nth-child(4n+2){border-top-color:var(--orange)}
+.stat:nth-child(4n+3){border-top-color:var(--maroon)}
+.stat:nth-child(4n+4){border-top-color:var(--sky)}
+.stat b{display:block;font:400 30px/1.05 Anton,Impact,sans-serif;color:var(--navy-d)}
+.stat span{display:block;margin-top:6px;font-size:13px;line-height:1.35;color:var(--muted);font-weight:600}
+.src{font-size:12px;color:var(--muted);margin:10px 2px 0}
+
+/* story + project */
+.story p{margin:0 0 12px}
+.project{background:linear-gradient(135deg,var(--navy-d),var(--navy));color:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.project .pt{font-weight:800;font-size:16px;line-height:1.35}
+.project dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:12px 0 0;font-size:14px}
+.project dt{opacity:.8}
+.project dd{margin:0;font-weight:700}
+.project + .project{margin-top:10px}
+.equip{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.equip li{background:#fff;border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start}
+.equip li i{flex:none;width:30px;height:30px;border-radius:50%;background:var(--gold);color:#4a3208;font-style:normal;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:14px}
+.equip li b{display:block;color:var(--navy-d)}
+.equip li span{font-size:13px;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.gallery img{border-radius:14px;aspect-ratio:1/1;object-fit:cover;width:100%}
+
+/* contact */
+.contact{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:6px 16px}
+.contact a,.contact div.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);font-weight:600}
+.contact > :last-child{border-bottom:0}
+.contact svg{flex:none;width:36px;height:36px}
+.contact small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+
+/* footer */
+footer{margin-top:26px;background:#fff;text-align:center;padding:18px 16px 22px}
+footer img{height:36px;width:auto;margin:0 auto 10px}
+footer p{margin:4px 0;font-size:13px;color:var(--muted)}
+footer .ev{font-weight:800;color:var(--navy-d)}
+
+/* sticky action bar */
+.actions{position:fixed;left:0;right:0;bottom:0;z-index:10;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+.actions .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:14px;border:0;font:800 15px Montserrat,Arial,sans-serif;text-decoration:none;cursor:pointer}
+.btn svg{width:20px;height:20px;flex:none}
+.btn.primary{background:var(--orange);color:#fff;box-shadow:0 4px 0 var(--orange-d)}
+.btn.sec{background:#eef4fb;color:var(--navy-d)}
+.btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+
+/* index page */
+.intro{padding:20px 16px 4px;background:#fff}
+.intro h1{margin:0;font:400 34px/1.05 Anton,Impact,sans-serif;text-transform:uppercase;color:var(--maroon)}
+.intro p{margin:8px 0 0;color:var(--muted);font-weight:600}
+.firm{display:block;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;text-decoration:none;color:var(--ink);margin-bottom:14px}
+.firm img{aspect-ratio:16/9;width:100%;object-fit:cover}
+.firm div{padding:14px 16px}
+.firm b{display:block;font:400 26px/1.05 Anton,Impact,sans-serif;text-transform:uppercase;color:var(--maroon)}
+.firm span{display:block;margin-top:4px;color:var(--muted);font-weight:600;font-size:14px}
+.firm em{display:inline-block;margin-top:10px;font-style:normal;font-weight:800;color:var(--orange-d)}
+
+@media (min-width:600px){
+  body{background:var(--page) url("../img/nstw-strip.png") left top/auto 24px repeat-x}
+  .wrap{margin-top:40px;margin-bottom:40px;border-radius:24px;overflow:hidden}
+  .title h1{font-size:46px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .product,.stat,.firm{transition:transform .2s ease}
+  .firm:active{transform:scale(.99)}
+}

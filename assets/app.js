@@ -70,7 +70,7 @@ const FIRMS = {
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" },
       { name: "Picker's Calamansi Concentrate", size: "1 litre bottle",
         ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
-        cut: "pickers-bottle2", back: "pickers-bottle2-photo.jpg", w: 120, h: 323, d: 44, edge: "#e39a14" }
+        cut: "pickers-bottle2", back: "pickers-bottle2-photo.jpg", w: 120, h: 344, d: 44, edge: "#e9a314" }
     ],
     // First screen: the firm's promotional banner.
     banner: "pickers-banner.webp"

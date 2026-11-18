@@ -221,6 +221,51 @@ function renderFirm(key) {
     <button class="btn sec" type="button" id="saveBtn">${I.save}Save</button>
   </div>`;
   document.getElementById("saveBtn").addEventListener("click", () => saveContact(f));
+  animate();
+}
+
+/* ---------- motion: scroll reveals and counting numbers ---------- */
+const MOTION_OK = !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+function countUp(el) {
+  const m = el.textContent.match(/^([^\d]*)([\d.]+)(.*)$/);
+  if (!m) return;                                   // e.g. "PQA" stays as text
+  const [, pre, num, post] = m, end = parseFloat(num), dec = (num.split(".")[1] || "").length;
+  const t0 = performance.now(), dur = 1400;
+  const step = now => {
+    const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = pre + (end * e).toFixed(dec) + post;
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function animate() {
+  if (!MOTION_OK) return;
+  const groups = [".product", ".mini .m", ".chips .chip", ".stat", ".story p", ".project", ".equip li", ".gallery img", ".contact", ".firm"];
+  groups.forEach(sel => document.querySelectorAll(sel).forEach((el, i) => {
+    el.classList.add("reveal"); el.style.setProperty("--d", Math.min(i, 6) * 0.08 + "s");
+  }));
+  const show = el => {
+    el.classList.add("in");
+    if (el.classList.contains("stat")) { const b = el.querySelector("b"); if (b && !b.dataset.done) { b.dataset.done = 1; countUp(b); } }
+  };
+  if (!("IntersectionObserver" in window)) { document.querySelectorAll(".reveal").forEach(show); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } }),
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  // Safety net: anything that is on screen (or already scrolled past) is shown,
+  // even if the observer is slow, so no content can stay invisible.
+  const sweep = () => {
+    const pending = document.querySelectorAll(".reveal:not(.in)");
+    pending.forEach(el => { if (el.getBoundingClientRect().top < innerHeight * 0.95) { show(el); io.unobserve(el); } });
+    if (!pending.length) { clearInterval(timer); removeEventListener("scroll", onScroll); }
+  };
+  let ticking = false;
+  const onScroll = () => { if (!ticking) { ticking = true; setTimeout(() => { ticking = false; sweep(); }, 120); } };
+  addEventListener("scroll", onScroll, { passive: true });
+  const timer = setInterval(sweep, 700);
 }
 
 /* Downloads a vCard so visitors can add the firm to their phone contacts. */
@@ -243,4 +288,5 @@ function renderIndex() {
     <div class="intro"><h1>SETUP-assisted products</h1><p>Local enterprises from Zamboanga Sibugay supported by DOST's Small Enterprise Technology Upgrading Program.</p></div>
     <div class="bar" style="margin-bottom:6px"></div>
     <section>${cards}</section>${footer()}`;
+  animate();
 }

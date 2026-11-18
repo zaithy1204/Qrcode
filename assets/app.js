@@ -70,8 +70,7 @@ const FIRMS = {
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" },
       { name: "Picker's Calamansi Concentrate", size: "1 litre bottle",
         ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
-        front: "pickers-bottle.webp", w: 290, h: 228, d: 12, color: "#1f7f26",
-        side: "linear-gradient(90deg,#e4e9e1,#ffffff,#e4e9e1)" }
+        cut: "pickers-bottle2", back: "pickers-bottle2-photo.jpg", w: 120, h: 323, d: 44, edge: "#e39a14" }
     ],
     // First screen: the firm's promotional banner.
     banner: "pickers-banner.webp"
@@ -138,18 +137,18 @@ const FIRMS = {
       { name: "Diamond Noodles Pancit Canton", size: "200 g pack",
         price: "₱45.00", priceLabel: "per pack", ribbon: "Featured at NSTW 2026",
         hooks: ["Premium wheat flour", "Mas pina-sarap!", "For special occasions"],
-        front: "dnf-canton-photo.jpg", w: 230, h: 248, d: 34, color: "#3a9a26", side: "linear-gradient(90deg,#2f7f1f,#45ad33,#2f7f1f)" },
+        cut: "dnf-canton2", w: 280, h: 200, d: 26, edge: "#2f8f22", color: "#3a9a26" },
       { name: "Dried Pansit Special", size: "20 g pack",
         ribbon: "Deliciously different", hooks: ["Fine yellow noodles", "For pansit and noodle soups"],
-        front: "dnf-pansit-photo.jpg", w: 290, h: 174, d: 26, color: "#e86a2b", side: "linear-gradient(90deg,#c9561f,#ee7a3d,#c9561f)" },
+        cut: "dnf-pansit2", w: 290, h: 187, d: 22, edge: "#d9581f", color: "#e86a2b" },
       { name: "Misua Special", size: "20 g pack",
         ribbon: "Quick to cook", hooks: ["Cooks in minutes", "Ideal for misua soup"],
-        front: "dnf-misua-photo.jpg", w: 290, h: 184, d: 26, color: "#d61c7b", side: "linear-gradient(90deg,#b5146a,#e2358b,#b5146a)" }
+        cut: "dnf-misua2", w: 290, h: 180, d: 22, edge: "#c8146f", color: "#d61c7b" }
     ],
     overview: [
-      { img: "3d/dnf-canton-photo.jpg", name: "Pancit Canton", price: "₱45.00" },
-      { img: "3d/dnf-pansit-photo.jpg", name: "Dried Pansit Special" },
-      { img: "3d/dnf-misua-photo.jpg", name: "Misua Special" }
+      { img: "3d/dnf-canton2-photo.jpg", name: "Pancit Canton", price: "₱45.00" },
+      { img: "3d/dnf-pansit2-photo.jpg", name: "Dried Pansit Special" },
+      { img: "3d/dnf-misua2-photo.jpg", name: "Misua Special" }
     ]
   }
 };

@@ -312,3 +312,7 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .v3d-obj.cut .face::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.3),rgba(255,255,255,0) 38%,rgba(0,0,0,0) 70%,rgba(0,0,0,.16))}
 .v3d-obj.cut .face.bk img,.v3d-obj.cut .face.bk .gen{transform:scaleX(-1)}
 .v3d-obj.cut .face.bk::after{background:linear-gradient(245deg,rgba(255,255,255,.18),rgba(0,0,0,0) 45%,rgba(0,0,0,.2))}
+/* overview tiles: wide packs, so one full-width tile on top and two below */
+.ov-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;aspect-ratio:auto}
+.ov-t{aspect-ratio:520/330}
+.ov-t.big{grid-column:1 / span 2;grid-row:auto;aspect-ratio:520/360}

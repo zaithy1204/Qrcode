@@ -412,7 +412,7 @@ function init3D(f) {
   let idx = 0, rx = -10, ry = -28, vx = 0, vy = 0, drag = null, last = 0, visible = true, raf = 0, target = null, swaying = false;
 
   const fit = () => slides.forEach((s, i) => {          // shrink large packs to fit small phone screens
-    const p = items[i], k = Math.min(1, stage.clientWidth * 0.64 / p.w, stage.clientHeight * 0.58 / p.h);
+    const p = items[i], k = Math.min(1, stage.clientWidth * 0.64 / p.w, stage.clientHeight * 0.64 / p.h);
     s.querySelector(".v3d-obj").style.setProperty("--s", k.toFixed(3));
   });
   const apply = () => { const o = slides[idx].querySelector(".v3d-obj"); o.style.setProperty("--rx", rx.toFixed(1) + "deg"); o.style.setProperty("--ry", ry.toFixed(1) + "deg"); };

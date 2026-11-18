@@ -44,7 +44,14 @@ const FIRMS = {
       { n: "Twin-tub fruit washer", d: "Cleans calamansi fruit faster and more thoroughly before extraction" }
     ],
     gallery: ["pickers-kettle.jpg", "pickers-washer.jpg"],
-    markets: ["Siay", "Kabasalan", "Imelda", "Zamboanga City", "Zamboanga del Sur", "Basilan", "Cebu City"]
+    markets: ["Siay", "Kabasalan", "Imelda", "Zamboanga City", "Zamboanga del Sur", "Basilan", "Cebu City"],
+    // 3D viewer: box sizes in px (width, height, depth); faces cut from the firm's own photos
+    products3d: [
+      { name: "Calamansi Juice Drink with Honey", size: "200 ml stand-up pouch · turn it to see the nutrition facts",
+        front: "pickers-pouch-front.jpg", back: "pickers-pouch-back.jpg", w: 170, h: 262, d: 40, side: "linear-gradient(90deg,#1d7a24,#35a83a,#1d7a24)", round: true },
+      { name: "Picker's Calamansi Juice Drink carton", size: "Shipping carton of pouches",
+        front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" }
+    ]
   },
 
   dnf: {
@@ -92,7 +99,15 @@ const FIRMS = {
       { n: "7-roller noodle processing machine", d: "Phase II upgrade for higher quality pansit" }
     ],
     gallery: [],
-    markets: ["Zamboanga Peninsula (Region IX)", "Northern Mindanao (Region X)", "MIMAROPA (Region IV-B)"]
+    markets: ["Zamboanga Peninsula (Region IX)", "Northern Mindanao (Region X)", "MIMAROPA (Region IV-B)"],
+    products3d: [
+      { name: "Diamond Noodles Pancit Canton", size: "200 g pack", front: "dnf-canton-front.jpg",
+        w: 220, h: 244, d: 56, side: "linear-gradient(90deg,#2f8d1f,#5dbb2f,#2f8d1f)", color: "#3a9a26", round: true },
+      { name: "Dried Pansit Special", size: "Deliciously different", front: "dnf-pansit-front.jpg",
+        w: 282, h: 186, d: 44, side: "linear-gradient(90deg,#c9531d,#ef7a3b,#c9531d)", color: "#e86a2b" },
+      { name: "Misua Special", size: "Fine wheat noodles", front: "dnf-misua-front.jpg",
+        w: 282, h: 172, d: 44, side: "linear-gradient(90deg,#b0145f,#e2378c,#b0145f)", color: "#d61c7b" }
+    ]
   }
 };
 
@@ -151,6 +166,8 @@ function renderFirm(key) {
     </div>
     <div class="bar"></div>
   </div>
+
+  ${f.products3d ? viewer3dHTML(f) : ""}
 
   <section>
     <h2>Featured product</h2>
@@ -219,6 +236,94 @@ function renderFirm(key) {
   </div>`;
   document.getElementById("saveBtn").addEventListener("click", () => saveContact(f));
   animate();
+  if (f.products3d) init3D(f);
+}
+
+/* ---------- 3D product viewer (pure CSS 3D, no library) ----------
+   Each product is a box with photo faces. Drag to rotate; arrows, dots or swipe on the caption to change product. */
+function viewer3dHTML(f) {
+  const faces = p => {
+    const img = (file, alt) => `<img src="${IMG("3d/" + file)}" alt="${esc(alt)}" draggable="false" loading="lazy" decoding="async">`;
+    const back = p.back ? img(p.back, p.name + " (back)")
+      : `<div class="gen" style="background:${p.color}"><small>${esc(f.name)}</small><b>${esc(p.name)}</b><span>${esc(p.size)}</span><em>DOST-SETUP assisted · NSTW 2026</em></div>`;
+    const side = `style="background:${p.side}"`;
+    return `<div class="fc front">${img(p.front, p.name)}</div><div class="fc back">${back}</div>
+      <div class="fc right" ${side}></div><div class="fc left" ${side}></div><div class="fc top" ${side}></div><div class="fc bottom" ${side}></div>`;
+  };
+  const items = f.products3d;
+  return `<section class="v3d" aria-label="Products in 3D">
+    <h2>Products in 3D</h2>
+    <div class="v3d-stage" id="v3dStage" tabindex="0" aria-label="3D product viewer. Drag to rotate, use the arrow keys to change product.">
+      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}"><div class="v3d-obj${p.round ? " r" : ""}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
+      <div class="v3d-shadow"></div>
+      ${items.length > 1 ? `<button class="v3d-nav prev" type="button" aria-label="Previous product">&#8249;</button><button class="v3d-nav next" type="button" aria-label="Next product">&#8250;</button>` : ""}
+      <div class="v3d-hint">&#8634; Drag to rotate</div>
+    </div>
+    <div class="v3d-cap" id="v3dCap"><b id="v3dName"></b><span id="v3dSize"></span></div>
+    ${items.length > 1 ? `<div class="v3d-dots">${items.map((p, i) => `<button type="button" aria-label="Show ${esc(p.name)}" data-i="${i}"></button>`).join("")}</div>` : ""}
+  </section>`;
+}
+
+function init3D(f) {
+  const stage = document.getElementById("v3dStage"); if (!stage) return;
+  const slides = [...stage.querySelectorAll(".v3d-slide")], dots = [...document.querySelectorAll(".v3d-dots button")];
+  const items = f.products3d, auto = MOTION_OK;
+  let idx = 0, rx = -10, ry = -28, vx = 0, vy = 0, drag = null, last = 0, visible = true, raf = 0, target = null;
+
+  const fit = () => slides.forEach((s, i) => {          // shrink large packs to fit small phone screens
+    const p = items[i], k = Math.min(1, stage.clientWidth * 0.6 / p.w, stage.clientHeight * 0.62 / p.h);
+    s.firstElementChild.style.setProperty("--s", k.toFixed(3));
+  });
+  const apply = () => { const o = slides[idx].firstElementChild; o.style.setProperty("--rx", rx.toFixed(1) + "deg"); o.style.setProperty("--ry", ry.toFixed(1) + "deg"); };
+  const go = n => {
+    const prev = idx; idx = (n + items.length) % items.length;
+    slides.forEach((s, i) => { s.classList.toggle("on", i === idx); s.classList.toggle("left", i !== idx && (i < idx)); s.classList.toggle("right", i !== idx && i > idx); });
+    dots.forEach((d, i) => d.setAttribute("aria-current", i === idx ? "true" : "false"));
+    document.getElementById("v3dName").textContent = items[idx].name;
+    document.getElementById("v3dSize").textContent = items[idx].size;
+    // welcome spin: one full turn that settles with the front facing the viewer
+    vx = vy = 0; rx = -10; ry = (auto && prev !== idx) ? -28 - 360 : -28; target = (auto && prev !== idx) ? -28 : null;
+    last = performance.now(); apply();
+  };
+
+  stage.addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
+    drag = { x: e.clientX, y: e.clientY }; vx = vy = 0; target = null; stage.setPointerCapture(e.pointerId); stage.classList.add("grab");
+  });
+  stage.addEventListener("pointermove", e => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag = { x: e.clientX, y: e.clientY };
+    vx = dx * 0.5; vy = -dy * 0.35; ry += vx; rx = Math.max(-45, Math.min(45, rx + vy)); last = performance.now(); apply();
+  });
+  const end = () => { drag = null; stage.classList.remove("grab"); last = performance.now(); };
+  stage.addEventListener("pointerup", end); stage.addEventListener("pointercancel", end);
+  stage.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { go(idx + 1); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { go(idx - 1); e.preventDefault(); }
+  });
+  stage.querySelector(".prev")?.addEventListener("click", () => go(idx - 1));
+  stage.querySelector(".next")?.addEventListener("click", () => go(idx + 1));
+  dots.forEach(d => d.addEventListener("click", () => go(+d.dataset.i)));
+
+  // swipe on the caption / dots row to change product (dragging the stage itself rotates)
+  let sx = null; const cap = document.getElementById("v3dCap");
+  cap.addEventListener("pointerdown", e => { sx = e.clientX; });
+  cap.addEventListener("pointerup", e => { if (sx !== null && Math.abs(e.clientX - sx) > 40) go(idx + (e.clientX < sx ? 1 : -1)); sx = null; });
+
+  const tick = now => {
+    if (!drag && target !== null) {
+      ry += (target - ry) * 0.07; if (Math.abs(target - ry) < 0.4) { ry = target; target = null; last = now; } apply();
+    } else if (!drag) {
+      if (Math.abs(vx) > 0.05 || Math.abs(vy) > 0.05) { ry += vx; rx = Math.max(-45, Math.min(45, rx + vy)); vx *= 0.93; vy *= 0.9; apply(); }
+      else if (auto && now - last > 2500) { ry += 0.35; rx += (-10 - rx) * 0.02; apply(); }
+    }
+    raf = visible ? requestAnimationFrame(tick) : 0;
+  };
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(es => es.forEach(e => { visible = e.isIntersecting; if (visible && !raf) raf = requestAnimationFrame(tick); })).observe(stage);
+  }
+  addEventListener("resize", fit);
+  fit(); go(0); raf = requestAnimationFrame(tick);
 }
 
 /* ---------- motion: scroll reveals and counting numbers ---------- */

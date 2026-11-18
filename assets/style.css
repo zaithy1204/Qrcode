@@ -302,3 +302,13 @@ footer .ev{font-weight:800;color:var(--navy-d)}
   .ov-t:nth-child(2){--i:1}.ov-t:nth-child(3){--i:2}
   @keyframes ovIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
 }
+.fc.front{background:#fff}                         /* photos with a transparent background sit on white */
+.fc .crop{width:100%;height:100%}
+.ov-banner{width:100%;aspect-ratio:1376/768;object-fit:cover;border-radius:14px;display:block;box-shadow:0 8px 20px rgba(22,59,105,.16)}
+@media (prefers-reduced-motion:no-preference){.ov-banner{animation:ovIn .6s cubic-bezier(.2,.8,.2,1) both}}
+/* cut-out packs: photo cut along the real outline, thickness from stacked outline slices */
+.v3d-obj.cut .sl{position:absolute;left:0;top:0;width:var(--w);height:var(--h);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.v3d-obj.cut .face img{width:100%;height:100%;object-fit:fill;display:block;pointer-events:none}
+.v3d-obj.cut .face::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.3),rgba(255,255,255,0) 38%,rgba(0,0,0,0) 70%,rgba(0,0,0,.16))}
+.v3d-obj.cut .face.bk img,.v3d-obj.cut .face.bk .gen{transform:scaleX(-1)}
+.v3d-obj.cut .face.bk::after{background:linear-gradient(245deg,rgba(255,255,255,.18),rgba(0,0,0,0) 45%,rgba(0,0,0,.2))}

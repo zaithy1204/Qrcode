@@ -56,28 +56,25 @@ const FIRMS = {
     ],
     gallery: ["pickers-kettle.jpg", "pickers-washer.jpg"],
     markets: ["Siay", "Kabasalan", "Imelda", "Zamboanga City", "Zamboanga del Sur", "Basilan", "Cebu City"],
-    // 3D slides. Packs are plain rectangles with the photo stretched to fill each face (no cut edges);
-    // bottle: true wraps the front and back photos around a round bottle. Sizes in px: w, h, depth d.
+    // 3D slides. Products are rectangles with the photo on the front face; cut: "name" instead cuts the
+    // photo along its outline (img/3d/name-photo.jpg + name-mask.png) and gives it thickness.
+    // crop: [x, y, w, h, imageWidth, imageHeight] shows only that part of the photo. Sizes in px: w, h, depth d.
     // Optional: price/priceLabel (price tag), ribbon (gold label), hooks (selling-point chips).
     products3d: [
       { name: "Calamansi Juice Drink with Honey", size: "200 ml stand-up pouch · turn it to see the nutrition facts",
         price: "₱13.00", priceLabel: "per pouch", ribbon: "Featured at NSTW 2026",
         hooks: ["Rich in Vitamin C", "Real calamansi + honey", "Halal-certified"],
-        front: "pickers-pouch-photo.jpg", back: "pickers-pouch-backphoto.jpg", w: 180, h: 268, d: 24,
-        side: "linear-gradient(90deg,#17691d,#2a9a30,#17691d)" },
+        cut: "pickers-pouch2", back: "pickers-pouch-backphoto.jpg", w: 180, h: 298, d: 18, edge: "#1f7f26" },
       { name: "Picker's Calamansi Juice Drink carton", size: "Box of 10 pouches",
         ribbon: "Order by the box", hooks: ["For events and resellers", "FDA-compliant"],
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" },
-      { name: "Picker's Calamansi Juice in a bottle", size: "Calamansi Juice Concentrate · 1 litre bottle",
+      { name: "Picker's Calamansi Concentrate", size: "1 litre bottle",
         ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
-        bottle: true, front: "pickers-pouch-photo.jpg", back: "pickers-pouch-backphoto.jpg", w: 132, h: 290, d: 132, cap: "#1f7f26" }
+        front: "pickers-bottle.webp", w: 290, h: 228, d: 12, color: "#1f7f26",
+        side: "linear-gradient(90deg,#e4e9e1,#ffffff,#e4e9e1)" }
     ],
-    // First screen: neat product overview. The first photo is the large tile.
-    overview: [
-      { img: "3d/pickers-pouch-photo.jpg", name: "Calamansi Juice Drink with Honey", price: "₱13.00" },
-      { img: "pickers-juice.jpg", name: "200 ml pouches" },
-      { img: "3d/pickers-box-front.jpg", name: "Box of 10 pouches" }
-    ]
+    // First screen: the firm's promotional banner.
+    banner: "pickers-banner.webp"
   },
 
   dnf: {
@@ -218,7 +215,7 @@ function renderFirm(key) {
 
   document.getElementById("app").innerHTML = `
   ${header()}
-  ${f.overview ? overviewHTML(f) : `<div class="hero">
+  ${f.overview || f.banner ? overviewHTML(f) : `<div class="hero">
     <img class="photo" src="${IMG(f.hero)}" alt="${esc(f.name)} products" fetchpriority="high">
     <span class="badge">DOST-SETUP <b>Assisted Firm</b></span>
   </div>`}
@@ -293,6 +290,10 @@ function renderFirm(key) {
 
 /* First screen: a neat overview of the firm's products. The first photo is the large tile. */
 function overviewHTML(f) {
+  if (f.banner) return `<div class="hero overview">
+    <div class="ov-head"><span class="badge">DOST-SETUP <b>Assisted Firm</b></span><span class="ov-cap">Our products</span></div>
+    <img class="ov-banner" src="${IMG(f.banner)}" alt="${esc(f.name)}: ${esc(f.products3d.map(p => p.name).join(", "))}" fetchpriority="high">
+  </div>`;
   const tile = (it, i) => `<figure class="ov-t${i ? "" : " big"}"><img src="${IMG(it.img)}" alt="${esc(it.name)}"${i ? '' : ' fetchpriority="high"'}>
       ${it.price ? `<span class="ov-price">${esc(it.price)}</span>` : ""}<figcaption>${esc(it.name)}</figcaption></figure>`;
   return `<div class="hero overview">
@@ -313,6 +314,10 @@ function viewer3dHTML(f) {
     const body = ring(N, R, sw, bodyH, bodyTop, i => {
       const k = (i + N / 4) % N, front = k < N / 2;          // strips facing the viewer show the front photo
       const j = k % (N / 2);                               // left-to-right column of that photo
+      if (p.wrap) {                                         // one bottle photo: its label area wraps all the way round
+        const c = p.wrap, sx = half / c.w, sy = bodyH / c.h;
+        return `background:url(${IMG("3d/" + c.img)}) ${(-(c.x * sx) - j * sw).toFixed(2)}px ${(-c.y * sy).toFixed(2)}px/${(c.W * sx).toFixed(1)}px ${(c.H * sy).toFixed(1)}px no-repeat;filter:brightness(${shade(i)})`;
+      }
       const img = IMG("3d/" + (front ? p.front : p.back));
       return `background:url(${img}) ${(-j * sw).toFixed(2)}px 0/${half.toFixed(2)}px ${bodyH}px no-repeat;filter:brightness(${shade(i)})`;
     });
@@ -321,19 +326,38 @@ function viewer3dHTML(f) {
     const shoulder = Array.from({ length: nS }, (_, i) =>
       `<div class="bt sh" style="left:${((W - swS) / 2).toFixed(2)}px;top:${(capH + neckH + (shH - slant) / 2).toFixed(2)}px;width:${swS}px;height:${slant.toFixed(2)}px;
         clip-path:polygon(0 100%,100% 100%,${(50 + top / 2).toFixed(1)}% 0,${(50 - top / 2).toFixed(1)}% 0);
-        transform:rotateY(${(i * 360 / nS).toFixed(2)}deg) translateZ(${((R + rS) / 2).toFixed(2)}px) rotateX(${tilt.toFixed(2)}deg);filter:brightness(${(0.8 + 0.2 * Math.cos(i / nS * 2 * Math.PI - 0.6)).toFixed(3)})"></div>`).join("");
+        transform:rotateY(${(i * 360 / nS).toFixed(2)}deg) translateZ(${((R + rS) / 2).toFixed(2)}px) rotateX(${tilt.toFixed(2)}deg);${p.liquid ? `background:linear-gradient(180deg,${p.liquid[0]},${p.liquid[1]});` : ""}filter:brightness(${(0.8 + 0.2 * Math.cos(i / nS * 2 * Math.PI - 0.6)).toFixed(3)})"></div>`).join("");
     const nN = 16, swN = +(2 * rS * Math.tan(Math.PI / nN) + 0.6).toFixed(2), rC = 25, swC = +(2 * rC * Math.tan(Math.PI / nN) + 0.6).toFixed(2);
-    const neck = ring(nN, rS, swN, neckH + 2, capH - 1, () => "background:linear-gradient(90deg,#cfe7a0,#e9f5c9,#cfe7a0)");
+    const neck = ring(nN, rS, swN, neckH + 2, capH - 1, () => p.liquid ? `background:linear-gradient(90deg,${p.liquid[1]},${p.liquid[0]},${p.liquid[1]})` : "background:linear-gradient(90deg,#cfe7a0,#e9f5c9,#cfe7a0)");
     const cap = ring(nN, rC, swC, capH, 0, i => `background:repeating-linear-gradient(90deg,${p.cap} 0 3px,#14561a 3px 4px);filter:brightness(${(0.8 + 0.2 * Math.cos(i / nN * 2 * Math.PI - 0.6)).toFixed(3)})`);
     const disc = (r, y, bg, rot) => `<div class="bt disc" style="left:${W / 2 - r}px;top:${y - r}px;width:${2 * r}px;height:${2 * r}px;background:${bg};transform:rotateX(${rot}deg)"></div>`;
-    return cap + disc(rC, 0, p.cap, 90) + neck + shoulder + body + disc(R, p.h, "#14561a", -90);
+    return cap + disc(rC, 0, p.cap, 90) + neck + shoulder + body + disc(R, p.h, p.liquid ? p.liquid[1] : "#14561a", -90);
+  };
+  // Solid cut-out: the outline is stacked in thin slices so the edge follows the pack's real shape;
+  // the photo sits on the front slice and the back photo on the rear one.
+  const cutout = p => {
+    const mask = `url(${IMG("3d/" + p.cut + "-mask.png")})`, n = Math.max(12, Math.round(p.d / 1.2)), out = [];
+    const m = `-webkit-mask-image:${mask};mask-image:${mask}`;
+    for (let i = 1; i < n; i++) {
+      const z = (i / n - 0.5) * p.d, shade = 0.55 + 0.25 * Math.abs(i / n - 0.5) * 2;
+      out.push(`<div class="sl" style="${m};background:${p.edge};filter:brightness(${shade.toFixed(2)});transform:translateZ(${z.toFixed(1)}px)"></div>`);
+    }
+    const front = `<div class="sl face" style="${m};transform:translateZ(${p.d / 2}px)"><img src="${IMG("3d/" + p.cut + "-photo.jpg")}" alt="${esc(p.name)}" draggable="false" loading="lazy" decoding="async"></div>`;
+    const back = p.back
+      ? `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)"><img src="${IMG("3d/" + p.back)}" alt="${esc(p.name)} (back)" draggable="false" loading="lazy" decoding="async"></div>`
+      : `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)">${genBack(p)}</div>`;
+    return out.join("") + front + back;
   };
   const faces = p => {
     if (p.bottle) return bottle(p);
+    if (p.cut) return cutout(p);
     const img = (file, alt) => `<img src="${IMG("3d/" + file)}" alt="${esc(alt)}" draggable="false" loading="lazy" decoding="async">`;
     const back = p.back ? img(p.back, p.name + " (back)") : genBack(p);
     const side = `style="background:${p.side}"`;
-    return `<div class="fc front">${img(p.front, p.name)}</div><div class="fc back">${back}</div>
+    const front = p.crop
+      ? `<div class="crop" role="img" aria-label="${esc(p.name)}" style="background:url(${IMG("3d/" + p.front)}) ${(-p.crop[0] * p.w / p.crop[2]).toFixed(1)}px ${(-p.crop[1] * p.h / p.crop[3]).toFixed(1)}px/${(p.crop[4] * p.w / p.crop[2]).toFixed(1)}px ${(p.crop[5] * p.h / p.crop[3]).toFixed(1)}px no-repeat"></div>`
+      : img(p.front, p.name);
+    return `<div class="fc front">${front}</div><div class="fc back">${back}</div>
       <div class="fc right" ${side}></div><div class="fc left" ${side}></div><div class="fc top" ${side}></div><div class="fc bottom" ${side}></div>`;
   };
   // Back of a pack we have no photo of: a clean label in the pack's own colour.
@@ -346,7 +370,7 @@ function viewer3dHTML(f) {
     <h2>Products in 3D</h2>
     <div class="v3d-stage" id="v3dStage" tabindex="0" aria-label="3D product viewer. Drag to rotate, use the arrow keys to change product.">
       <div class="v3d-pedestal"></div>
-      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}">${tags(p)}<div class="v3d-obj${p.bottle ? " bottle" : " box"}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
+      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}">${tags(p)}<div class="v3d-obj${p.bottle ? " bottle" : p.cut ? " cut" : " box"}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
       ${items.length > 1 ? `<button class="v3d-nav prev" type="button" aria-label="Previous product">&#8249;</button><button class="v3d-nav next" type="button" aria-label="Next product">&#8250;</button>` : ""}
       <div class="v3d-hint">&#8634; Drag to rotate</div>
     </div>

@@ -321,3 +321,19 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .v3d-dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:#d8cdbb;cursor:pointer;transition:width .25s,background .25s}
 .v3d-dots button[aria-current="true"]{width:26px;border-radius:6px;background:var(--orange)}
 @media (prefers-reduced-motion:reduce){.v3d-slide{transition:none}}
+/* responsive: header logos shrink to fit, and small phones (≤360px) get tighter labels and buttons */
+.top img{min-width:0;flex:0 1 auto;max-width:55%;height:auto;max-height:30px;object-fit:contain}
+.top .nstw{max-width:40%;max-height:34px}
+.ov-head .badge,.ov-cap{white-space:nowrap}
+@media (max-width:360px){
+  .top{gap:8px;padding:12px}
+  .hero.overview .badge{font-size:9px;letter-spacing:.06em;padding:5px 9px}
+  .ov-cap{font-size:9.5px;letter-spacing:.1em}
+  .title h1{font-size:34px}
+  .btn{font-size:13.5px;gap:6px;min-height:46px}
+  .actions .in{gap:6px}
+  .v3d-rib{font-size:9.5px;padding:5px 9px}
+  .v3d-price{font-size:17px}
+  .v3d-hooks span{font-size:11px;padding:4px 8px}
+}
+.contact a > div,.contact .row > div{min-width:0;overflow-wrap:anywhere}   /* long email addresses wrap on small phones */

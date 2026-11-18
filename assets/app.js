@@ -27,9 +27,9 @@ const FIRMS = {
     },
     // Other variations. While ingredients is "" the line stays hidden (fill it in once the firm confirms).
     more: [
-      { name: "Calamansi Juice (ready to drink)", size: "250 ml and 350 ml pouches", ingredients: "",
+      { name: "Calamansi Juice (ready to drink)", size: "250 ml and 350 ml pouches", img: "pickers-juice.jpg", ingredients: "",
         storage: { cold: false, text: "Cool, dry place. Refrigerate once opened." } },
-      { name: "Calamansi Juice Concentrate", size: "1 litre bottle", price: "₱200.00", ingredients: "",
+      { name: "Calamansi Juice Concentrate", size: "1 litre bottle", price: "₱200.00", img: "3d/pickers-bottle-new.webp", ingredients: "",
         desc: "Dilute with water to taste.",
         storage: { cold: true, text: "Keep refrigerated after opening." } },
       { name: "Calamansi Puree", size: "Ask at the booth", ingredients: "",
@@ -70,7 +70,10 @@ const FIRMS = {
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" },
       { name: "Picker's Calamansi Concentrate", size: "1 litre bottle",
         price: "₱200.00", priceLabel: "per bottle", ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
-        cut: "pickers-bottle2", back: "pickers-bottle2-photo.jpg", w: 120, h: 344, d: 44, edge: "#e9a314" }
+        // round bottle spun from its real outline: prof = half-width (photo px) at 29 evenly spaced heights
+        lathe: { img: "pickers-bottle2-photo.jpg", pw: 300, ph: 861, cx: 150, k: 0.42, top: "#1f9a3a", bottom: "#e9a314",
+          prof: [29.5, 65.5, 67.5, 61.5, 86.5, 107.5, 125, 137.5, 140.5, 144.5, 144.5, 145, 145.5, 145.5, 146.5, 146.5, 148, 146, 148, 147.5, 147, 148, 147.5, 148, 148, 147, 147, 144, 140] },
+        w: 126, h: 362, d: 126 }
     ],
     // First screen: the firm's promotional banner.
     banner: "pickers-banner.webp"
@@ -98,10 +101,10 @@ const FIRMS = {
       tags: ["Premium wheat flour", "Contains wheat (gluten)", "Made in Zamboanga Sibugay"]
     },
     more: [
-      { name: "Dried Pansit Special", size: "20 g pack", img: "dnf-pansit.jpg", ingredients: "",
+      { name: "Dried Pansit Special", size: "20 g pack", img: "3d/dnf-pansit2-photo.jpg", ingredients: "",
         desc: "Deliciously different. Fine yellow noodles for pansit and noodle soups.",
         storage: { cold: false, text: "Cool, dry place. No refrigeration needed." } },
-      { name: "Misua Special", size: "20 g pack", img: "dnf-misua.jpg", ingredients: "",
+      { name: "Misua Special", size: "20 g pack", img: "3d/dnf-misua2-photo.jpg", ingredients: "",
         desc: "Fine wheat noodles that cook in minutes, ideal for misua soup.",
         storage: { cold: false, text: "Cool, dry place. No refrigeration needed." } },
       { name: "Miki and Odong", size: "Dried noodles", ingredients: "",
@@ -332,6 +335,32 @@ function viewer3dHTML(f) {
     const disc = (r, y, bg, rot) => `<div class="bt disc" style="left:${W / 2 - r}px;top:${y - r}px;width:${2 * r}px;height:${2 * r}px;background:${bg};transform:rotateX(${rot}deg)"></div>`;
     return cap + disc(rC, 0, p.cap, 90) + neck + shoulder + body + disc(R, p.h, p.liquid ? p.liquid[1] : "#14561a", -90);
   };
+  // Round bottle that follows the real bottle: its outline (radius at each height) is spun into a solid of
+  // revolution made of small strips; each strip shows the slice of the photo it covers, so from the front it
+  // looks exactly like the photo and it stays round as it turns.
+  const lathe = p => {
+    const L = p.lathe, k = L.k, N = 24, B = L.prof.length - 1, dA = 2 * Math.PI / N, out = [];
+    const W = p.w, H = L.ph * k, cx = L.cx;
+    for (let b = 0; b < B; b++) {
+      const y0 = b * L.ph / B, y1 = (b + 1) * L.ph / B, R0 = L.prof[b], R1 = L.prof[b + 1], Rm = (R0 + R1) / 2;
+      const r0 = R0 * k, r1 = R1 * k, rm = Rm * k, dy = (y1 - y0) * k;
+      const hEl = Math.hypot(dy, r1 - r0), tilt = Math.atan2(r1 - r0, dy) * 180 / Math.PI;
+      const wEl = 2 * Math.max(r0, r1) * Math.tan(dA / 2) + 2, rMax = Math.max(r0, r1, 0.01);
+      const t = 50 * r0 / rMax, u = 50 * r1 / rMax;
+      for (let i = 0; i < N; i++) {
+        const a = i * dA, sgn = Math.cos(a) >= 0 ? 1 : -1;
+        const cL = cx + sgn * Rm * Math.sin(a - dA / 2), cR = cx + sgn * Rm * Math.sin(a + dA / 2);
+        const sw = Math.max(0.6, cR - cL), fx = wEl / sw, fy = hEl / (y1 - y0);
+        out.push(`<div class="bt" style="left:${((W - wEl) / 2).toFixed(2)}px;top:${(((y0 + y1) / 2) * k - hEl / 2).toFixed(2)}px;width:${wEl.toFixed(2)}px;height:${(hEl + 1.6).toFixed(2)}px;background-color:#e9a314;` +
+          `clip-path:polygon(${(50 - t).toFixed(1)}% 0,${(50 + t).toFixed(1)}% 0,${(50 + u).toFixed(1)}% 100%,${(50 - u).toFixed(1)}% 100%);` +
+          `background:url(${IMG("3d/" + L.img)}) ${(-Math.min(cL, cR) * fx).toFixed(2)}px ${(-y0 * fy).toFixed(2)}px/${(L.pw * fx).toFixed(1)}px ${(L.ph * fy).toFixed(1)}px no-repeat #e9a314;` +
+          `filter:brightness(${(0.84 + 0.16 * Math.cos(a - 0.5)).toFixed(3)});` +
+          `transform:rotateY(${(i * 360 / N).toFixed(2)}deg) translateZ(${rm.toFixed(2)}px) rotateX(${tilt.toFixed(2)}deg)"></div>`);
+      }
+    }
+    const disc = (r, y, bg, rot) => `<div class="bt disc" style="left:${(W / 2 - r).toFixed(2)}px;top:${(y - r).toFixed(2)}px;width:${(2 * r).toFixed(2)}px;height:${(2 * r).toFixed(2)}px;background:${bg};transform:rotateX(${rot}deg)"></div>`;
+    return disc(L.prof[0] * k, 0, L.top, 90) + out.join("") + disc(L.prof[B] * k, H, L.bottom, -90);
+  };
   // Solid cut-out: the outline is stacked in thin slices so the edge follows the pack's real shape;
   // the photo sits on the front slice and the back photo on the rear one.
   const cutout = p => {
@@ -348,6 +377,7 @@ function viewer3dHTML(f) {
     return out.join("") + front + back;
   };
   const faces = p => {
+    if (p.lathe) return lathe(p);
     if (p.bottle) return bottle(p);
     if (p.cut) return cutout(p);
     const img = (file, alt) => `<img src="${IMG("3d/" + file)}" alt="${esc(alt)}" draggable="false" loading="lazy" decoding="async">`;
@@ -369,7 +399,7 @@ function viewer3dHTML(f) {
     <h2>Products in 3D</h2>
     <div class="v3d-stage" id="v3dStage" tabindex="0" aria-label="3D product viewer. Drag to rotate, use the arrow keys to change product.">
       <div class="v3d-pedestal"></div>
-      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}">${tags(p)}<div class="v3d-obj${p.bottle ? " bottle" : p.cut ? " cut" : " box"}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
+      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}">${tags(p)}<div class="v3d-obj${p.bottle || p.lathe ? " bottle" : p.cut ? " cut" : " box"}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
       ${items.length > 1 ? `<button class="v3d-nav prev" type="button" aria-label="Previous product">&#8249;</button><button class="v3d-nav next" type="button" aria-label="Next product">&#8250;</button>` : ""}
       <div class="v3d-hint">&#8634; Drag to rotate</div>
     </div>

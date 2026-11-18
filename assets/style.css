@@ -316,3 +316,4 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .ov-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;aspect-ratio:auto}
 .ov-t{aspect-ratio:520/330}
 .ov-t.big{grid-column:1 / span 2;grid-row:auto;aspect-ratio:520/360}
+.var > img{object-fit:contain;background:#fff;aspect-ratio:16/10}   /* show the whole product photo */

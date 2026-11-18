@@ -194,15 +194,15 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 /* ---------- 3D product viewer ---------- */
 /* Studio stage: navy backdrop, soft spotlight, gold-rimmed pedestal. */
 .v3d-stage{position:relative;height:360px;perspective:1100px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden;border-radius:var(--radius);
-  background:radial-gradient(75% 60% at 50% 34%,#2f6aa8 0%,#1d4e89 42%,#123460 78%,#0d2747 100%);box-shadow:0 14px 34px rgba(13,39,71,.28);outline:none}
+  background:radial-gradient(80% 65% at 50% 32%,#ffffff 0%,#f7f9fc 45%,#e8eef5 100%);box-shadow:0 14px 34px rgba(22,59,105,.14);border:1px solid #e3e9f1;outline:none}
 .v3d-stage.grab{cursor:grabbing}
-.v3d-stage:focus-visible{box-shadow:0 0 0 3px var(--gold),0 14px 34px rgba(13,39,71,.28)}
+.v3d-stage:focus-visible{box-shadow:0 0 0 3px var(--sky),0 14px 34px rgba(22,59,105,.14)}
 .v3d-stage::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(38% 70% at 50% -8%,rgba(255,255,255,.22),rgba(255,255,255,0) 70%),linear-gradient(90deg,var(--gold),var(--gold-d)) top/100% 3px no-repeat}
+  background:linear-gradient(90deg,var(--navy) 0 26%,var(--sky) 26% 44%,var(--orange) 44% 68%,var(--maroon) 68% 86%,var(--gold) 86%) top/100% 4px no-repeat}
 .v3d-pedestal{position:absolute;left:50%;bottom:40px;width:64%;max-width:300px;height:36px;transform:translateX(-50%);border-radius:50%;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 35%,#3a78ba 0%,#1d4e89 55%,#143a66 100%);border:1px solid rgba(242,201,140,.7);
-  box-shadow:0 12px 26px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.18)}
-.v3d-pedestal::after{content:"";position:absolute;left:18%;right:18%;top:22%;height:46%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),rgba(0,0,0,0))}
+  background:radial-gradient(ellipse at 50% 35%,#ffffff 0%,#eef2f7 55%,#d7dfe9 100%);border:1px solid var(--gold-d);
+  box-shadow:0 10px 22px rgba(22,59,105,.2),inset 0 2px 0 #fff}
+.v3d-pedestal::after{content:"";position:absolute;left:18%;right:18%;top:22%;height:46%;border-radius:50%;background:radial-gradient(closest-side,rgba(22,40,70,.3),rgba(22,40,70,0))}
 .v3d-rib{position:absolute;left:14px;top:16px;z-index:3;background:linear-gradient(90deg,var(--gold),var(--gold-d));color:#4a3208;font:800 10.5px Montserrat,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .v3d-price{position:absolute;right:14px;top:14px;z-index:3;background:var(--orange);color:#fff;font:900 20px/1 Montserrat,Arial,sans-serif;padding:7px 11px 8px;border-radius:12px;text-align:right;box-shadow:0 3px 0 var(--orange-d),0 8px 18px rgba(0,0,0,.25)}
 .v3d-price small{display:block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;opacity:.95}
@@ -245,12 +245,12 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .gen .gl i{display:block;width:44px;height:3px;border-radius:2px;margin:4px 0 2px;background:linear-gradient(90deg,var(--navy) 0 30%,var(--orange) 30% 70%,var(--gold) 70%)}
 .gen .gl em{font:600 9.5px Montserrat,Arial,sans-serif;font-style:normal;color:var(--muted)}
 .gen p{margin:0;font:700 9px Montserrat,Arial,sans-serif;letter-spacing:.06em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
-.v3d-nav{position:absolute;top:50%;width:42px;height:42px;margin-top:-21px;border-radius:50%;border:1px solid rgba(242,201,140,.6);background:rgba(13,39,71,.55);
-  color:#fff;font:400 28px/38px Montserrat,Arial,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;z-index:4;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.v3d-nav{position:absolute;top:50%;width:42px;height:42px;margin-top:-21px;border-radius:50%;border:1px solid #dbe3ee;background:rgba(255,255,255,.95);
+  color:var(--navy-d);font:400 28px/38px Montserrat,Arial,sans-serif;box-shadow:0 4px 14px rgba(22,59,105,.16);cursor:pointer;z-index:4;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .v3d-nav.prev{left:10px}.v3d-nav.next{right:10px}
 .v3d-nav:focus-visible{outline:3px solid var(--gold)}
-.v3d-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font:700 10.5px Montserrat,Arial,sans-serif;letter-spacing:.06em;color:var(--gold);
-  background:rgba(13,39,71,.6);padding:4px 11px;border-radius:12px;pointer-events:none;white-space:nowrap}
+.v3d-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font:700 10.5px Montserrat,Arial,sans-serif;letter-spacing:.06em;color:var(--navy-d);
+  background:rgba(255,255,255,.9);border:1px solid #e3e9f1;padding:4px 11px;border-radius:12px;pointer-events:none;white-space:nowrap}
 .v3d-cap{text-align:center;padding:14px 8px 2px;touch-action:pan-y}
 .v3d-cap b{display:block;font:800 18px/1.25 Montserrat,Arial,sans-serif;color:var(--navy-d)}
 .v3d-cap > span{display:block;margin-top:2px;font:600 13px Montserrat,Arial,sans-serif;color:var(--muted)}
@@ -285,12 +285,12 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .v3d-obj.bottle .bt.sh{background:linear-gradient(180deg,#e6f3c4,#bcd98a)}
 
 /* ---------- first screen: neat overview of the products ---------- */
-.hero.overview{padding:14px 14px 16px;background:linear-gradient(180deg,#1d4e89,#163b69)}
+.hero.overview{padding:14px 14px 16px;background:linear-gradient(180deg,#ffffff 0%,#f4f7fb 60%,#e9eef5 100%)}
 .ov-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
-.hero.overview .badge{position:static;background:rgba(255,255,255,.1);border:1px solid rgba(242,201,140,.55);padding:6px 11px;font-size:10.5px}
-.ov-cap{color:var(--gold);font:800 11px Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid var(--gold)}
+.hero.overview .badge{position:static;padding:6px 11px;font-size:10.5px}
+.ov-cap{color:var(--orange-d);font:800 11px Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid var(--orange)}
 .ov-grid{display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:1fr 1fr;gap:10px;aspect-ratio:4/3.1}
-.ov-t{position:relative;margin:0;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.ov-t{position:relative;margin:0;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 8px 20px rgba(22,59,105,.16);border:1px solid #e3e9f1}
 .ov-t.big{grid-row:1 / span 2}
 .ov-t img{width:100%;height:100%;object-fit:cover;display:block}
 .ov-t figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;color:#fff;font:800 12px/1.25 Montserrat,Arial,sans-serif;

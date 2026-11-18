@@ -145,6 +145,8 @@ const FIRMS = {
         ribbon: "Quick to cook", hooks: ["Cooks in minutes", "Ideal for misua soup"],
         cut: "dnf-misua2", w: 290, h: 180, d: 22, edge: "#c8146f", color: "#d61c7b" }
     ],
+    // First screen: the firm's promotional banner (overview tiles below are kept as a fallback).
+    banner: "dnf-banner.webp",
     overview: [
       { img: "3d/dnf-canton2-photo.jpg", name: "Pancit Canton", price: "₱45.00" },
       { img: "3d/dnf-pansit2-photo.jpg", name: "Dried Pansit Special" },

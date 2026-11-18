@@ -70,10 +70,7 @@ const FIRMS = {
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" },
       { name: "Picker's Calamansi Concentrate", size: "1 litre bottle",
         price: "₱200.00", priceLabel: "per bottle", ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
-        // round bottle spun from its real outline: prof = half-width (photo px) at 29 evenly spaced heights
-        lathe: { img: "pickers-bottle2-photo.jpg", pw: 300, ph: 861, cx: 150, k: 0.42, top: "#1f9a3a", bottom: "#e9a314",
-          prof: [29.5, 65.5, 67.5, 61.5, 86.5, 107.5, 125, 137.5, 140.5, 144.5, 144.5, 145, 145.5, 145.5, 146.5, 146.5, 148, 146, 148, 147.5, 147, 148, 147.5, 148, 148, 147, 147, 144, 140] },
-        w: 126, h: 362, d: 126 }
+        cut: "pickers-bottle2", back: "pickers-bottle2-photo.jpg", w: 120, h: 344, d: 44, edge: "#e9a314" }
     ],
     // First screen: the firm's promotional banner.
     banner: "pickers-banner.webp"

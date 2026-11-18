@@ -56,24 +56,27 @@ const FIRMS = {
     ],
     gallery: ["pickers-kettle.jpg", "pickers-washer.jpg"],
     markets: ["Siay", "Kabasalan", "Imelda", "Zamboanga City", "Zamboanga del Sur", "Basilan", "Cebu City"],
-    // 3D viewer. "cut" products are photos cut along the pack's real outline (photo + mask) and given
-    // thickness by stacking the outline; boxes (the carton) keep flat faces. Sizes in px: w, h, depth d.
-    // Optional per product: price/priceLabel (price tag), ribbon (gold label), hooks (selling-point chips).
+    // 3D slides. Packs are plain rectangles with the photo stretched to fill each face (no cut edges);
+    // bottle: true wraps the front and back photos around a round bottle. Sizes in px: w, h, depth d.
+    // Optional: price/priceLabel (price tag), ribbon (gold label), hooks (selling-point chips).
     products3d: [
       { name: "Calamansi Juice Drink with Honey", size: "200 ml stand-up pouch · turn it to see the nutrition facts",
         price: "₱13.00", priceLabel: "per pouch", ribbon: "Featured at NSTW 2026",
         hooks: ["Rich in Vitamin C", "Real calamansi + honey", "Halal-certified"],
-        cut: "pickers-pouch", back: "pickers-pouch-backphoto.jpg", w: 180, h: 268, d: 18, edge: "#1f7f26" },
+        front: "pickers-pouch-photo.jpg", back: "pickers-pouch-backphoto.jpg", w: 180, h: 268, d: 24,
+        side: "linear-gradient(90deg,#17691d,#2a9a30,#17691d)" },
       { name: "Picker's Calamansi Juice Drink carton", size: "Box of 10 pouches",
         ribbon: "Order by the box", hooks: ["For events and resellers", "FDA-compliant"],
-        front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" }
+        front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" },
+      { name: "Picker's Calamansi Juice in a bottle", size: "Calamansi Juice Concentrate · 1 litre bottle",
+        ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
+        bottle: true, front: "pickers-pouch-photo.jpg", back: "pickers-pouch-backphoto.jpg", w: 132, h: 290, d: 132, cap: "#1f7f26" }
     ],
-    // First screen: all products together. cx = centre (% of width), b = bottom (%), h or w = size (%),
-    // ar = image width / height, rot = tilt in degrees.
-    lineup: [
-      { img: "pickers-box-front.jpg", cx: 31, b: 9, w: 56, ar: 620 / 289, z: 1 },
-      { cut: "pickers-pouch", cx: 86, b: 8, h: 56, ar: 460 / 685, rot: 6, z: 2 },
-      { cut: "pickers-pouch", cx: 64, b: 5, h: 70, ar: 460 / 685, z: 3 }
+    // First screen: neat product overview. The first photo is the large tile.
+    overview: [
+      { img: "3d/pickers-pouch-photo.jpg", name: "Calamansi Juice Drink with Honey", price: "₱13.00" },
+      { img: "pickers-juice.jpg", name: "200 ml pouches" },
+      { img: "3d/pickers-box-front.jpg", name: "Box of 10 pouches" }
     ]
   },
 
@@ -135,21 +138,21 @@ const FIRMS = {
     gallery: [],
     markets: ["Zamboanga Peninsula (Region IX)", "Northern Mindanao (Region X)", "MIMAROPA (Region IV-B)"],
     products3d: [
-      { name: "Diamond Noodles Pancit Canton", size: "200 g pack", cut: "dnf-canton",
+      { name: "Diamond Noodles Pancit Canton", size: "200 g pack",
         price: "₱45.00", priceLabel: "per pack", ribbon: "Featured at NSTW 2026",
         hooks: ["Premium wheat flour", "Mas pina-sarap!", "For special occasions"],
-        w: 230, h: 248, d: 28, edge: "#3f9a2a", color: "#3a9a26" },
-      { name: "Dried Pansit Special", size: "20 g pack", cut: "dnf-pansit",
+        front: "dnf-canton-photo.jpg", w: 230, h: 248, d: 34, color: "#3a9a26", side: "linear-gradient(90deg,#2f7f1f,#45ad33,#2f7f1f)" },
+      { name: "Dried Pansit Special", size: "20 g pack",
         ribbon: "Deliciously different", hooks: ["Fine yellow noodles", "For pansit and noodle soups"],
-        w: 290, h: 174, d: 18, edge: "#e2672c", color: "#e86a2b" },
-      { name: "Misua Special", size: "20 g pack", cut: "dnf-misua",
+        front: "dnf-pansit-photo.jpg", w: 290, h: 174, d: 26, color: "#e86a2b", side: "linear-gradient(90deg,#c9561f,#ee7a3d,#c9561f)" },
+      { name: "Misua Special", size: "20 g pack",
         ribbon: "Quick to cook", hooks: ["Cooks in minutes", "Ideal for misua soup"],
-        w: 290, h: 184, d: 18, edge: "#d61c7b", color: "#d61c7b" }
+        front: "dnf-misua-photo.jpg", w: 290, h: 184, d: 26, color: "#d61c7b", side: "linear-gradient(90deg,#b5146a,#e2358b,#b5146a)" }
     ],
-    lineup: [
-      { cut: "dnf-pansit", cx: 24, b: 20, w: 46, ar: 520 / 311, rot: -8, z: 1 },
-      { cut: "dnf-misua", cx: 76, b: 20, w: 46, ar: 520 / 330, rot: 8, z: 1 },
-      { cut: "dnf-canton", cx: 50, b: 6, h: 66, ar: 440 / 475, z: 2 }
+    overview: [
+      { img: "3d/dnf-canton-photo.jpg", name: "Pancit Canton", price: "₱45.00" },
+      { img: "3d/dnf-pansit-photo.jpg", name: "Dried Pansit Special" },
+      { img: "3d/dnf-misua-photo.jpg", name: "Misua Special" }
     ]
   }
 };
@@ -215,7 +218,7 @@ function renderFirm(key) {
 
   document.getElementById("app").innerHTML = `
   ${header()}
-  ${f.lineup ? lineupHTML(f) : `<div class="hero">
+  ${f.overview ? overviewHTML(f) : `<div class="hero">
     <img class="photo" src="${IMG(f.hero)}" alt="${esc(f.name)} products" fetchpriority="high">
     <span class="badge">DOST-SETUP <b>Assisted Firm</b></span>
   </div>`}
@@ -285,42 +288,48 @@ function renderFirm(key) {
 }
 
 /* ---------- 3D product viewer (pure CSS 3D, no library) ----------
-   Packs are photos cut along their real outline with stacked thickness; the carton is a box. Drag to rotate; arrows, dots or swipe on the caption to change product. */
-/* First screen: every product of the firm together on a studio backdrop. */
-function lineupHTML(f) {
-  const items = f.lineup.map((it, i) => {
-    const size = it.h ? `height:${it.h}%` : `width:${it.w}%`;
-    const style = `left:${it.cx}%;bottom:${it.b}%;${size};aspect-ratio:${it.ar.toFixed(4)};z-index:${it.z || 1};--rot:${it.rot || 0}deg;--dl:${(0.08 + i * 0.12).toFixed(2)}s`;
-    const inner = it.cut
-      ? `<div class="lu-m" style="-webkit-mask-image:url(${IMG("3d/" + it.cut + "-mask.png")});mask-image:url(${IMG("3d/" + it.cut + "-mask.png")})"><img src="${IMG("3d/" + it.cut + "-photo.jpg")}" alt="" fetchpriority="${i === f.lineup.length - 1 ? "high" : "auto"}"></div>`
-      : `<div class="lu-m box"><img src="${IMG("3d/" + it.img)}" alt=""></div>`;
-    return `<div class="lu-i${it.cut ? "" : " boxi"}" style="${style}">${inner}</div>`;
-  }).join("");
-  return `<div class="hero lineup" role="img" aria-label="${esc(f.name)}: ${esc(f.products3d.map(p => p.name).join(", "))}">
-    <div class="lu-bg"></div>${items}
-    <span class="badge">DOST-SETUP <b>Assisted Firm</b></span>
-    <span class="lu-cap">Our products</span>
+   Packs are rectangles with the photo stretched to fill each face; the bottle wraps the photos around
+   a round body. Drag to rotate; arrows, dots or swipe on the caption to change product. */
+
+/* First screen: a neat overview of the firm's products. The first photo is the large tile. */
+function overviewHTML(f) {
+  const tile = (it, i) => `<figure class="ov-t${i ? "" : " big"}"><img src="${IMG(it.img)}" alt="${esc(it.name)}"${i ? '' : ' fetchpriority="high"'}>
+      ${it.price ? `<span class="ov-price">${esc(it.price)}</span>` : ""}<figcaption>${esc(it.name)}</figcaption></figure>`;
+  return `<div class="hero overview">
+    <div class="ov-head"><span class="badge">DOST-SETUP <b>Assisted Firm</b></span><span class="ov-cap">Our products</span></div>
+    <div class="ov-grid">${f.overview.map(tile).join("")}</div>
   </div>`;
 }
 
 function viewer3dHTML(f) {
-  // Solid cut-out: the outline is stacked in thin slices (darker toward the middle) so the edge
-  // follows the pack's real shape; the photo sits on the front slice and the back on the rear one.
-  const cutout = p => {
-    const mask = `url(${IMG("3d/" + p.cut + "-mask.png")})`, n = Math.max(12, Math.round(p.d / 1.2)), out = [];
-    const m = `-webkit-mask-image:${mask};mask-image:${mask}`;
-    for (let i = 1; i < n; i++) {
-      const z = (i / n - 0.5) * p.d, shade = 0.55 + 0.25 * Math.abs(i / n - 0.5) * 2;
-      out.push(`<div class="sl" style="${m};background:${p.edge};filter:brightness(${shade.toFixed(2)});transform:translateZ(${z.toFixed(1)}px)"></div>`);
-    }
-    const front = `<div class="sl face" style="${m};transform:translateZ(${p.d / 2}px)"><img src="${IMG("3d/" + p.cut + "-photo.jpg")}" alt="${esc(p.name)}" draggable="false" loading="lazy" decoding="async"></div>`;
-    const back = p.back
-      ? `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)"><img src="${IMG("3d/" + p.back)}" alt="${esc(p.name)} (back)" draggable="false" loading="lazy" decoding="async"></div>`
-      : `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)">${genBack(p)}</div>`;
-    return out.join("") + front + back;
+  // Round bottle: the body is a ring of narrow strips; each strip shows its own slice of the photo,
+  // so the front photo wraps around the front half and the back photo around the back half.
+  const bottle = p => {
+    const R = 62, N = 32, sw = +(2 * R * Math.tan(Math.PI / N) + 0.6).toFixed(2), half = sw * N / 2;
+    const W = p.w, capH = 28, neckH = 20, shH = 40, bodyH = p.h - capH - neckH - shH, bodyTop = capH + neckH + shH;
+    const ring = (n, r, w, h, top, styleFn) => Array.from({ length: n }, (_, i) =>
+      `<div class="bt" style="left:${((W - w) / 2).toFixed(2)}px;top:${top}px;width:${w}px;height:${h}px;transform:rotateY(${(i * 360 / n).toFixed(2)}deg) translateZ(${r}px);${styleFn(i)}"></div>`).join("");
+    const shade = i => (0.82 + 0.18 * Math.cos((i / N) * 2 * Math.PI - 0.6)).toFixed(3);
+    const body = ring(N, R, sw, bodyH, bodyTop, i => {
+      const k = (i + N / 4) % N, front = k < N / 2;          // strips facing the viewer show the front photo
+      const j = k % (N / 2);                               // left-to-right column of that photo
+      const img = IMG("3d/" + (front ? p.front : p.back));
+      return `background:url(${img}) ${(-j * sw).toFixed(2)}px 0/${half.toFixed(2)}px ${bodyH}px no-repeat;filter:brightness(${shade(i)})`;
+    });
+    const rS = 22, nS = 24, swS = +(2 * R * Math.tan(Math.PI / nS) + 0.6).toFixed(2);
+    const slant = Math.hypot(R - rS, shH), tilt = Math.atan2(R - rS, shH) * 180 / Math.PI, top = (rS / R) * 100;
+    const shoulder = Array.from({ length: nS }, (_, i) =>
+      `<div class="bt sh" style="left:${((W - swS) / 2).toFixed(2)}px;top:${(capH + neckH + (shH - slant) / 2).toFixed(2)}px;width:${swS}px;height:${slant.toFixed(2)}px;
+        clip-path:polygon(0 100%,100% 100%,${(50 + top / 2).toFixed(1)}% 0,${(50 - top / 2).toFixed(1)}% 0);
+        transform:rotateY(${(i * 360 / nS).toFixed(2)}deg) translateZ(${((R + rS) / 2).toFixed(2)}px) rotateX(${tilt.toFixed(2)}deg);filter:brightness(${(0.8 + 0.2 * Math.cos(i / nS * 2 * Math.PI - 0.6)).toFixed(3)})"></div>`).join("");
+    const nN = 16, swN = +(2 * rS * Math.tan(Math.PI / nN) + 0.6).toFixed(2), rC = 25, swC = +(2 * rC * Math.tan(Math.PI / nN) + 0.6).toFixed(2);
+    const neck = ring(nN, rS, swN, neckH + 2, capH - 1, () => "background:linear-gradient(90deg,#cfe7a0,#e9f5c9,#cfe7a0)");
+    const cap = ring(nN, rC, swC, capH, 0, i => `background:repeating-linear-gradient(90deg,${p.cap} 0 3px,#14561a 3px 4px);filter:brightness(${(0.8 + 0.2 * Math.cos(i / nN * 2 * Math.PI - 0.6)).toFixed(3)})`);
+    const disc = (r, y, bg, rot) => `<div class="bt disc" style="left:${W / 2 - r}px;top:${y - r}px;width:${2 * r}px;height:${2 * r}px;background:${bg};transform:rotateX(${rot}deg)"></div>`;
+    return cap + disc(rC, 0, p.cap, 90) + neck + shoulder + body + disc(R, p.h, "#14561a", -90);
   };
   const faces = p => {
-    if (p.cut) return cutout(p);
+    if (p.bottle) return bottle(p);
     const img = (file, alt) => `<img src="${IMG("3d/" + file)}" alt="${esc(alt)}" draggable="false" loading="lazy" decoding="async">`;
     const back = p.back ? img(p.back, p.name + " (back)") : genBack(p);
     const side = `style="background:${p.side}"`;
@@ -337,7 +346,7 @@ function viewer3dHTML(f) {
     <h2>Products in 3D</h2>
     <div class="v3d-stage" id="v3dStage" tabindex="0" aria-label="3D product viewer. Drag to rotate, use the arrow keys to change product.">
       <div class="v3d-pedestal"></div>
-      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}">${tags(p)}<div class="v3d-obj${p.round ? " r" : ""}${p.cut ? " cut" : " box"}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
+      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}">${tags(p)}<div class="v3d-obj${p.bottle ? " bottle" : " box"}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
       ${items.length > 1 ? `<button class="v3d-nav prev" type="button" aria-label="Previous product">&#8249;</button><button class="v3d-nav next" type="button" aria-label="Next product">&#8250;</button>` : ""}
       <div class="v3d-hint">&#8634; Drag to rotate</div>
     </div>
@@ -353,7 +362,7 @@ function init3D(f) {
   let idx = 0, rx = -10, ry = -28, vx = 0, vy = 0, drag = null, last = 0, visible = true, raf = 0, target = null, swaying = false;
 
   const fit = () => slides.forEach((s, i) => {          // shrink large packs to fit small phone screens
-    const p = items[i], k = Math.min(1, stage.clientWidth * 0.64 / p.w, stage.clientHeight * 0.52 / p.h);
+    const p = items[i], k = Math.min(1, stage.clientWidth * 0.64 / p.w, stage.clientHeight * 0.58 / p.h);
     s.querySelector(".v3d-obj").style.setProperty("--s", k.toFixed(3));
   });
   const apply = () => { const o = slides[idx].querySelector(".v3d-obj"); o.style.setProperty("--rx", rx.toFixed(1) + "deg"); o.style.setProperty("--ry", ry.toFixed(1) + "deg"); };

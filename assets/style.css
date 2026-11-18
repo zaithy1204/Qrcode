@@ -246,3 +246,10 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .v3d-dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:#d8cdbb;cursor:pointer;transition:width .25s,background .25s}
 .v3d-dots button[aria-current="true"]{width:26px;border-radius:6px;background:var(--orange)}
 @media (prefers-reduced-motion:reduce){.v3d-slide{transition:none}}
+
+/* cut-out packs: photo cut along the real outline, thickness from stacked outline slices */
+.v3d-obj.cut .sl{position:absolute;left:0;top:0;width:var(--w);height:var(--h);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.v3d-obj.cut .face img{width:100%;height:100%;object-fit:fill;display:block;pointer-events:none}
+.v3d-obj.cut .face::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.3),rgba(255,255,255,0) 38%,rgba(0,0,0,0) 70%,rgba(0,0,0,.16))}
+.v3d-obj.cut .face.bk img,.v3d-obj.cut .face.bk .gen{transform:scaleX(-1)}
+.v3d-obj.cut .face.bk::after{background:linear-gradient(245deg,rgba(255,255,255,.18),rgba(0,0,0,0) 45%,rgba(0,0,0,.2))}

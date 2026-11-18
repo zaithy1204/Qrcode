@@ -45,10 +45,11 @@ const FIRMS = {
     ],
     gallery: ["pickers-kettle.jpg", "pickers-washer.jpg"],
     markets: ["Siay", "Kabasalan", "Imelda", "Zamboanga City", "Zamboanga del Sur", "Basilan", "Cebu City"],
-    // 3D viewer: box sizes in px (width, height, depth); faces cut from the firm's own photos
+    // 3D viewer. "cut" products are photos cut along the pack's real outline (photo + mask) and given
+    // thickness by stacking the outline; boxes (the carton) keep flat faces. Sizes in px: w, h, depth d.
     products3d: [
       { name: "Calamansi Juice Drink with Honey", size: "200 ml stand-up pouch · turn it to see the nutrition facts",
-        front: "pickers-pouch-front.jpg", back: "pickers-pouch-back.jpg", w: 170, h: 262, d: 40, side: "linear-gradient(90deg,#1d7a24,#35a83a,#1d7a24)", round: true },
+        cut: "pickers-pouch", back: "pickers-pouch-backphoto.jpg", w: 180, h: 268, d: 30, edge: "#1f7f26" },
       { name: "Picker's Calamansi Juice Drink carton", size: "Shipping carton of pouches",
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" }
     ]
@@ -101,12 +102,12 @@ const FIRMS = {
     gallery: [],
     markets: ["Zamboanga Peninsula (Region IX)", "Northern Mindanao (Region X)", "MIMAROPA (Region IV-B)"],
     products3d: [
-      { name: "Diamond Noodles Pancit Canton", size: "200 g pack", front: "dnf-canton-front.jpg",
-        w: 220, h: 244, d: 56, side: "linear-gradient(90deg,#2f8d1f,#5dbb2f,#2f8d1f)", color: "#3a9a26", round: true },
-      { name: "Dried Pansit Special", size: "Deliciously different", front: "dnf-pansit-front.jpg",
-        w: 282, h: 186, d: 44, side: "linear-gradient(90deg,#c9531d,#ef7a3b,#c9531d)", color: "#e86a2b" },
-      { name: "Misua Special", size: "Fine wheat noodles", front: "dnf-misua-front.jpg",
-        w: 282, h: 172, d: 44, side: "linear-gradient(90deg,#b0145f,#e2378c,#b0145f)", color: "#d61c7b" }
+      { name: "Diamond Noodles Pancit Canton", size: "200 g pack", cut: "dnf-canton",
+        w: 230, h: 248, d: 48, edge: "#3f9a2a", color: "#3a9a26" },
+      { name: "Dried Pansit Special", size: "Deliciously different", cut: "dnf-pansit",
+        w: 290, h: 174, d: 40, edge: "#e2672c", color: "#e86a2b" },
+      { name: "Misua Special", size: "Fine wheat noodles", cut: "dnf-misua",
+        w: 290, h: 184, d: 40, edge: "#d61c7b", color: "#d61c7b" }
     ]
   }
 };
@@ -240,9 +241,25 @@ function renderFirm(key) {
 }
 
 /* ---------- 3D product viewer (pure CSS 3D, no library) ----------
-   Each product is a box with photo faces. Drag to rotate; arrows, dots or swipe on the caption to change product. */
+   Packs are photos cut along their real outline with stacked thickness; the carton is a box. Drag to rotate; arrows, dots or swipe on the caption to change product. */
 function viewer3dHTML(f) {
+  // Solid cut-out: the outline is stacked in thin slices (darker toward the middle) so the edge
+  // follows the pack's real shape; the photo sits on the front slice and the back on the rear one.
+  const cutout = p => {
+    const mask = `url(${IMG("3d/" + p.cut + "-mask.png")})`, n = 14, out = [];
+    const m = `-webkit-mask-image:${mask};mask-image:${mask}`;
+    for (let i = 1; i < n; i++) {
+      const z = (i / n - 0.5) * p.d, shade = 0.55 + 0.25 * Math.abs(i / n - 0.5) * 2;
+      out.push(`<div class="sl" style="${m};background:${p.edge};filter:brightness(${shade.toFixed(2)});transform:translateZ(${z.toFixed(1)}px)"></div>`);
+    }
+    const front = `<div class="sl face" style="${m};transform:translateZ(${p.d / 2}px)"><img src="${IMG("3d/" + p.cut + "-photo.jpg")}" alt="${esc(p.name)}" draggable="false" loading="lazy" decoding="async"></div>`;
+    const back = p.back
+      ? `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)"><img src="${IMG("3d/" + p.back)}" alt="${esc(p.name)} (back)" draggable="false" loading="lazy" decoding="async"></div>`
+      : `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)"><div class="gen" style="background:${p.color}"><small>${esc(f.name)}</small><b>${esc(p.name)}</b><span>${esc(p.size)}</span><em>DOST-SETUP assisted · NSTW 2026</em></div></div>`;
+    return out.join("") + front + back;
+  };
   const faces = p => {
+    if (p.cut) return cutout(p);
     const img = (file, alt) => `<img src="${IMG("3d/" + file)}" alt="${esc(alt)}" draggable="false" loading="lazy" decoding="async">`;
     const back = p.back ? img(p.back, p.name + " (back)")
       : `<div class="gen" style="background:${p.color}"><small>${esc(f.name)}</small><b>${esc(p.name)}</b><span>${esc(p.size)}</span><em>DOST-SETUP assisted · NSTW 2026</em></div>`;
@@ -254,7 +271,7 @@ function viewer3dHTML(f) {
   return `<section class="v3d" aria-label="Products in 3D">
     <h2>Products in 3D</h2>
     <div class="v3d-stage" id="v3dStage" tabindex="0" aria-label="3D product viewer. Drag to rotate, use the arrow keys to change product.">
-      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}"><div class="v3d-obj${p.round ? " r" : ""}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
+      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}"><div class="v3d-obj${p.round ? " r" : ""}${p.cut ? " cut" : ""}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
       <div class="v3d-shadow"></div>
       ${items.length > 1 ? `<button class="v3d-nav prev" type="button" aria-label="Previous product">&#8249;</button><button class="v3d-nav next" type="button" aria-label="Next product">&#8250;</button>` : ""}
       <div class="v3d-hint">&#8634; Drag to rotate</div>

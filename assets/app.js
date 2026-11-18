@@ -15,6 +15,8 @@ const FIRMS = {
     featured: {
       name: "Calamansi Juice Drink with Honey",
       size: "200 ml pouch · Box of 10 pouches",
+      // Optional price: leave "" to hide it, or fill in e.g. price: "₱13.00", priceLabel: "SRP per pouch"
+      price: "", priceLabel: "SRP per pouch",
       img: "pickers-pouch.jpg", imgPos: "center 42%",
       desc: "The natural sweetness of honey in every sip. Made with water, calamansi extract, refined sugar, potassium sorbate and honey. Rich in Vitamin C to help boost immunity and keep you energized through the day.",
       tags: ["Halal-certified", "FDA-compliant", "Rich in Vitamin C", "Shake well before drinking"]
@@ -67,6 +69,8 @@ const FIRMS = {
     featured: {
       name: "Diamond Noodles Pancit Canton",
       size: "200 g pack",
+      // Optional price: leave "" to hide it, or fill in e.g. price: "₱45.00", priceLabel: "Per pack"
+      price: "", priceLabel: "Per pack",
       img: "dnf-canton.jpg", imgPos: "center 40%",
       desc: "A Filipino classic, expertly made from premium wheat flour. Perfect for special occasions or simple home-cooked meals. Mas pina-sarap!",
       tags: ["Premium wheat flour", "Made in Zamboanga Sibugay"]
@@ -180,6 +184,7 @@ function renderFirm(key) {
         <p class="desc">${esc(p.desc)}</p>
         <div class="prow">
           <div class="tags">${p.tags.map((t, i) => `<span class="tag${i === 0 ? " gold" : ""}">${esc(t)}</span>`).join("")}</div>
+          ${p.price ? `<div class="price">${p.priceLabel ? `<small>${esc(p.priceLabel)}</small>` : ""}${esc(p.price)}</div>` : ""}
         </div>
       </div>
     </article>

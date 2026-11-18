@@ -18,13 +18,22 @@ const FIRMS = {
       // Optional price: leave "" to hide it, or fill in e.g. price: "₱13.00", priceLabel: "SRP per pouch"
       price: "₱13.00", priceLabel: "SRP per pouch",
       img: "pickers-pouch.jpg", imgPos: "center 42%",
-      desc: "The natural sweetness of honey in every sip. Made with water, calamansi extract, refined sugar, potassium sorbate and honey. Rich in Vitamin C to help boost immunity and keep you energized through the day.",
-      tags: ["Halal-certified", "FDA-compliant", "Rich in Vitamin C", "Shake well before drinking"]
+      desc: "The natural sweetness of honey in every sip. Rich in Vitamin C to help boost immunity and keep you energized through the day.",
+      // Ingredients as printed on the pouch label.
+      ingredients: "Water, calamansi extract, refined sugar, potassium sorbate, honey",
+      // storage.cold: true shows a snowflake (keep refrigerated); false shows the shelf icon.
+      storage: { cold: false, text: "Store in a cool, dry place away from direct sunlight. Best served chilled. Refrigerate once opened. Shake well before drinking." },
+      tags: ["Halal-certified", "FDA-compliant", "Rich in Vitamin C"]
     },
+    // Other variations. While ingredients is "" the line stays hidden (fill it in once the firm confirms).
     more: [
-      { name: "Calamansi Juice (ready to drink)", size: "250 ml and 350 ml pouches" },
-      { name: "Calamansi Juice Concentrate", size: "1 litre bottle" },
-      { name: "Calamansi Puree", size: "Ask at the booth" }
+      { name: "Calamansi Juice (ready to drink)", size: "250 ml and 350 ml pouches", ingredients: "",
+        storage: { cold: false, text: "Cool, dry place. Refrigerate once opened." } },
+      { name: "Calamansi Juice Concentrate", size: "1 litre bottle", ingredients: "",
+        desc: "Dilute with water to taste.",
+        storage: { cold: true, text: "Keep refrigerated after opening." } },
+      { name: "Calamansi Puree", size: "Ask at the booth", ingredients: "",
+        storage: { cold: true, text: "Keep refrigerated." } }
     ],
     story: [
       "Picker's Calamansi Food Products began in 2020, at the height of the COVID-19 pandemic, when Mr. and Mrs. Cariño saw two things in their community: an abundant local supply of calamansi, and a fruit known as a natural source of Vitamin C.",
@@ -73,13 +82,22 @@ const FIRMS = {
       price: "₱45.00", priceLabel: "Per pack",
       img: "dnf-canton.jpg", imgPos: "center 40%",
       desc: "A Filipino classic, expertly made from premium wheat flour. Perfect for special occasions or simple home-cooked meals. Mas pina-sarap!",
-      tags: ["Premium wheat flour", "Made in Zamboanga Sibugay"]
+      // Fill in from the pack label; the line stays hidden while it is "".
+      ingredients: "",
+      storage: { cold: false, text: "No refrigeration needed. Store in a cool, dry place. Once opened, keep in an airtight container." },
+      tags: ["Premium wheat flour", "Contains wheat (gluten)", "Made in Zamboanga Sibugay"]
     },
     more: [
-      { name: "Dried Pansit Special", size: "Deliciously different", img: "dnf-pansit.jpg" },
-      { name: "Misua Special", size: "Fine wheat noodles", img: "dnf-misua.jpg" },
-      { name: "Miki and Odong", size: "Dried noodles" },
-      { name: "Squash Noodles", size: "Vegetable-enriched, 120 g" }
+      { name: "Dried Pansit Special", size: "20 g pack", img: "dnf-pansit.jpg", ingredients: "",
+        desc: "Deliciously different. Fine yellow noodles for pansit and noodle soups.",
+        storage: { cold: false, text: "Cool, dry place. No refrigeration needed." } },
+      { name: "Misua Special", size: "20 g pack", img: "dnf-misua.jpg", ingredients: "",
+        desc: "Fine wheat noodles that cook in minutes, ideal for misua soup.",
+        storage: { cold: false, text: "Cool, dry place. No refrigeration needed." } },
+      { name: "Miki and Odong", size: "Dried noodles", ingredients: "",
+        storage: { cold: false, text: "Cool, dry place. No refrigeration needed." } },
+      { name: "Squash Noodles", size: "Vegetable-enriched, 120 g", ingredients: "",
+        storage: { cold: false, text: "Cool, dry place. No refrigeration needed." } }
     ],
     story: [
       "Ms. Lucia B. Coca started Diamond Noodles Factory in 2014 with ₱30,000 in capital, making dried miki and misua for the Ipil market. Within the year, \"Diamond Noodles\" was on its way to becoming a household name.",
@@ -108,9 +126,9 @@ const FIRMS = {
     products3d: [
       { name: "Diamond Noodles Pancit Canton", size: "200 g pack", cut: "dnf-canton",
         w: 230, h: 248, d: 48, edge: "#3f9a2a", color: "#3a9a26" },
-      { name: "Dried Pansit Special", size: "Deliciously different", cut: "dnf-pansit",
+      { name: "Dried Pansit Special", size: "20 g pack", cut: "dnf-pansit",
         w: 290, h: 174, d: 40, edge: "#e2672c", color: "#e86a2b" },
-      { name: "Misua Special", size: "Fine wheat noodles", cut: "dnf-misua",
+      { name: "Misua Special", size: "20 g pack", cut: "dnf-misua",
         w: 290, h: 184, d: 40, edge: "#d61c7b", color: "#d61c7b" }
     ]
   }
@@ -147,15 +165,33 @@ function footer() {
   </footer><div class="strip" role="presentation"></div>`;
 }
 
+/* Ingredients + storage block shared by the featured card and each variation.
+   Project amounts and impact figures are left off the QR page on purpose: they are in the printed
+   representative brief (NSTW-2026-Representative-Brief.html), discussed in person at the booth. */
+const P_SNOW = '<path d="M11 2h2v4.6l2.6-2.6 1.4 1.4L13 9.4V11h1.6l4-4 1.4 1.4-2.6 2.6H22v2h-4.6l2.6 2.6-1.4 1.4-4-4H13v1.6l4 4-1.4 1.4-2.6-2.6V22h-2v-4.6L8.4 20 7 18.6l4-4V13H9.4l-4 4L4 15.6 6.6 13H2v-2h4.6L4 8.4 5.4 7l4 4H11V9.4l-4-4L8.4 4 11 6.6z"/>';
+const P_SHELF = '<path d="M3 4h18v2H3zm2 3h6v6H5zm8 2h6v4h-6zM3 14h18v2H3zm2 3h4v3H5zm6 0h8v3h-8z"/>';
+const P_LEAF = '<path d="M20 3c-9 0-15 4-15 11 0 2 .6 3.6 1.5 4.8L4 21.3 5.4 22.7l2.6-2.6c1.2.6 2.6.9 4 .9 7 0 9-7 8-18zM9 17c2-4 5-7 9-9-3 3-6 6-9 9z"/>';
+function factsHTML(x) {
+  const st = x.storage;
+  if (!x.ingredients && !st) return "";
+  return `<dl class="facts">
+    ${x.ingredients ? `<div class="fi"><span class="fic">${I.circ("#3f8f3a", P_LEAF)}</span><div><dt>Ingredients</dt><dd>${esc(x.ingredients)}</dd></div></div>` : ""}
+    ${st ? `<div class="fi ${st.cold ? "cold" : "dry"}"><span class="fic">${I.circ(st.cold ? "#3d8fc6" : "#c9822e", st.cold ? P_SNOW : P_SHELF)}</span><div><dt>${st.cold ? "Keep refrigerated" : "Room temperature"}</dt><dd>${esc(st.text)}</dd></div></div>` : ""}
+  </dl>`;
+}
+
 /* ---------- firm page ---------- */
 function renderFirm(key) {
   const f = FIRMS[key]; if (!f) return;
   document.title = `${f.name} | NSTW 2026`;
   const p = f.featured;
-  const moreHtml = f.more.some(m => m.img)
-    ? `<div class="mini">${f.more.filter(m => m.img).map(m => `<div class="m"><img loading="lazy" src="${IMG(m.img)}" alt="${esc(m.name)}"><div>${esc(m.name)}<span>${esc(m.size)}</span></div></div>`).join("")}</div>
-       <div class="chips" style="margin-top:10px">${f.more.filter(m => !m.img).map(m => `<span class="chip">${esc(m.name)} · <span style="color:var(--muted)">${esc(m.size)}</span></span>`).join("")}</div>`
-    : `<div class="chips">${f.more.map(m => `<span class="chip">${esc(m.name)} · <span style="color:var(--muted)">${esc(m.size)}</span></span>`).join("")}</div>`;
+  const moreHtml = `<div class="vars">${f.more.map(m => `<article class="var">
+      ${m.img ? `<img loading="lazy" src="${IMG(m.img)}" alt="${esc(m.name)}">` : ""}
+      <div class="vb">
+        <h3>${esc(m.name)}</h3><p class="size">${esc(m.size)}${m.price ? ` · <b>${esc(m.price)}</b>` : ""}</p>
+        ${m.desc ? `<p class="vd">${esc(m.desc)}</p>` : ""}
+        ${factsHTML(m)}
+      </div></article>`).join("")}</div>`;
 
   document.getElementById("app").innerHTML = `
   ${header()}
@@ -182,6 +218,7 @@ function renderFirm(key) {
         <h3>${esc(p.name)}</h3>
         <p class="size">${esc(p.size)}</p>
         <p class="desc">${esc(p.desc)}</p>
+        ${factsHTML(p)}
         <div class="prow">
           <div class="tags">${p.tags.map((t, i) => `<span class="tag${i === 0 ? " gold" : ""}">${esc(t)}</span>`).join("")}</div>
           ${p.price ? `<div class="price">${p.priceLabel ? `<small>${esc(p.priceLabel)}</small>` : ""}${esc(p.price)}</div>` : ""}
@@ -191,31 +228,13 @@ function renderFirm(key) {
   </section>
 
   <section>
-    <h2>Also available</h2>
+    <h2>Variations</h2>
     ${moreHtml}
-  </section>
-
-  <section>
-    <h2>Impact of DOST support</h2>
-    <div class="stats">${f.stats.map(s => `<div class="stat"><b>${esc(s.v)}</b><span>${esc(s.l)}</span></div>`).join("")}</div>
-    <p class="src">${esc(f.statSource)}</p>
   </section>
 
   <section class="story">
     <h2>Our story</h2>
     ${f.story.map(t => `<p>${esc(t)}</p>`).join("")}
-  </section>
-
-  <section>
-    <h2>DOST project</h2>
-    ${f.projects.map(pr => `<div class="project"><div class="pt">${esc(pr.title)}</div>
-      <dl><dt>Program</dt><dd>${esc(pr.program)}</dd><dt>Assistance</dt><dd>${esc(pr.amount)}</dd><dt>Period</dt><dd>${esc(pr.period)}</dd></dl></div>`).join("")}
-  </section>
-
-  <section>
-    <h2>Technology provided</h2>
-    <ul class="equip">${f.equipment.map((e, i) => `<li><i>${i + 1}</i><div><b>${esc(e.n)}</b><span>${esc(e.d)}</span></div></li>`).join("")}</ul>
-    ${f.gallery.length ? `<div class="gallery">${f.gallery.map(g => `<img loading="lazy" src="${IMG(g)}" alt="Equipment provided through DOST SETUP">`).join("")}</div>` : ""}
   </section>
 
   <section>
@@ -366,7 +385,7 @@ function countUp(el) {
 
 function animate() {
   if (!MOTION_OK) return;
-  const groups = [".product", ".mini .m", ".chips .chip", ".stat", ".story p", ".project", ".equip li", ".gallery img", ".contact", ".firm"];
+  const groups = [".product", ".var", ".mini .m", ".chips .chip", ".stat", ".story p", ".project", ".equip li", ".gallery img", ".contact", ".firm"];
   // Only content below the first screen fades in; what is visible on arrival shows immediately.
   const fold = innerHeight * 0.9;
   groups.forEach(sel => document.querySelectorAll(sel).forEach((el, i) => {

@@ -253,3 +253,20 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .v3d-obj.cut .face::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.3),rgba(255,255,255,0) 38%,rgba(0,0,0,0) 70%,rgba(0,0,0,.16))}
 .v3d-obj.cut .face.bk img,.v3d-obj.cut .face.bk .gen{transform:scaleX(-1)}
 .v3d-obj.cut .face.bk::after{background:linear-gradient(245deg,rgba(255,255,255,.18),rgba(0,0,0,0) 45%,rgba(0,0,0,.2))}
+/* Product facts: ingredients and storage (QR page is marketing-only; project figures live in the printed brief) */
+.facts{margin:12px 0 0;display:grid;gap:8px}
+.facts .fi{display:flex;gap:10px;align-items:flex-start;background:#f7f9f4;border-radius:12px;padding:10px 12px}
+.facts .fi.cold{background:#eaf4fb}
+.facts .fi.dry{background:#fbf3e6}
+.facts .fic{flex:none;width:30px;height:30px}
+.facts .fic svg{width:30px;height:30px;display:block}
+.facts dt{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--navy-d)}
+.facts dd{margin:2px 0 0;font-size:14px;line-height:1.4}
+.vars{display:grid;gap:12px}
+.var{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.var > img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#eee;display:block}
+.var .vb{padding:12px 14px 14px}
+.var h3{margin:0;font:800 17px/1.25 Montserrat,Arial,sans-serif;color:var(--navy-d)}
+.var .size{margin:3px 0 0;color:var(--muted);font-weight:600;font-size:13px}
+.var .size b{color:var(--orange-d)}
+.var .vd{margin:8px 0 0;font-size:14px}

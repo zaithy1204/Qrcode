@@ -240,7 +240,10 @@ function countUp(el) {
 function animate() {
   if (!MOTION_OK) return;
   const groups = [".product", ".mini .m", ".chips .chip", ".stat", ".story p", ".project", ".equip li", ".gallery img", ".contact", ".firm"];
+  // Only content below the first screen fades in; what is visible on arrival shows immediately.
+  const fold = innerHeight * 0.9;
   groups.forEach(sel => document.querySelectorAll(sel).forEach((el, i) => {
+    if (el.getBoundingClientRect().top < fold) return;
     el.classList.add("reveal"); el.style.setProperty("--d", Math.min(i, 6) * 0.08 + "s");
   }));
   const show = el => {

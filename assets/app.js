@@ -29,7 +29,7 @@ const FIRMS = {
     more: [
       { name: "Calamansi Juice (ready to drink)", size: "250 ml and 350 ml pouches", ingredients: "",
         storage: { cold: false, text: "Cool, dry place. Refrigerate once opened." } },
-      { name: "Calamansi Juice Concentrate", size: "1 litre bottle", ingredients: "",
+      { name: "Calamansi Juice Concentrate", size: "1 litre bottle", price: "₱200.00", ingredients: "",
         desc: "Dilute with water to taste.",
         storage: { cold: true, text: "Keep refrigerated after opening." } },
       { name: "Calamansi Puree", size: "Ask at the booth", ingredients: "",
@@ -69,7 +69,7 @@ const FIRMS = {
         ribbon: "Order by the box", hooks: ["For events and resellers", "FDA-compliant"],
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" },
       { name: "Picker's Calamansi Concentrate", size: "1 litre bottle",
-        ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
+        price: "₱200.00", priceLabel: "per bottle", ribbon: "Also in bottles", hooks: ["Dilute with water to taste", "Keep refrigerated after opening"],
         cut: "pickers-bottle2", back: "pickers-bottle2-photo.jpg", w: 120, h: 344, d: 44, edge: "#e9a314" }
     ],
     // First screen: the firm's promotional banner.

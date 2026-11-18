@@ -192,16 +192,26 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 }
 
 /* ---------- 3D product viewer ---------- */
-.v3d-stage{position:relative;height:340px;perspective:1100px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden;border-radius:var(--radius);
-  background:radial-gradient(120% 80% at 50% 30%,#ffffff 0%,#fdf3e2 55%,#f5e3c4 100%);box-shadow:var(--shadow);outline:none}
+/* Studio stage: navy backdrop, soft spotlight, gold-rimmed pedestal. */
+.v3d-stage{position:relative;height:360px;perspective:1100px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;overflow:hidden;border-radius:var(--radius);
+  background:radial-gradient(75% 60% at 50% 34%,#2f6aa8 0%,#1d4e89 42%,#123460 78%,#0d2747 100%);box-shadow:0 14px 34px rgba(13,39,71,.28);outline:none}
 .v3d-stage.grab{cursor:grabbing}
-.v3d-stage:focus-visible{box-shadow:0 0 0 3px var(--sky),var(--shadow)}
-.v3d-stage::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:url("../img/nstw-strip.png") 0 center/auto 100% repeat-x;opacity:.9}
+.v3d-stage:focus-visible{box-shadow:0 0 0 3px var(--gold),0 14px 34px rgba(13,39,71,.28)}
+.v3d-stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(38% 70% at 50% -8%,rgba(255,255,255,.22),rgba(255,255,255,0) 70%),linear-gradient(90deg,var(--gold),var(--gold-d)) top/100% 3px no-repeat}
+.v3d-pedestal{position:absolute;left:50%;bottom:40px;width:64%;max-width:300px;height:36px;transform:translateX(-50%);border-radius:50%;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 35%,#3a78ba 0%,#1d4e89 55%,#143a66 100%);border:1px solid rgba(242,201,140,.7);
+  box-shadow:0 12px 26px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.18)}
+.v3d-pedestal::after{content:"";position:absolute;left:18%;right:18%;top:22%;height:46%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),rgba(0,0,0,0))}
+.v3d-rib{position:absolute;left:14px;top:16px;z-index:3;background:linear-gradient(90deg,var(--gold),var(--gold-d));color:#4a3208;font:800 10.5px Montserrat,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.v3d-price{position:absolute;right:14px;top:14px;z-index:3;background:var(--orange);color:#fff;font:900 20px/1 Montserrat,Arial,sans-serif;padding:7px 11px 8px;border-radius:12px;text-align:right;box-shadow:0 3px 0 var(--orange-d),0 8px 18px rgba(0,0,0,.25)}
+.v3d-price small{display:block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;opacity:.95}
 .v3d-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .45s;opacity:0;pointer-events:none}
 .v3d-slide.right{transform:translateX(70%) scale(.8)}
 .v3d-slide.left{transform:translateX(-70%) scale(.8)}
 .v3d-slide.on{opacity:1;transform:none}
-.v3d-obj{position:relative;width:var(--w);height:var(--h);margin-top:-18px;transform-style:preserve-3d;
+.v3d-slide{align-items:flex-end;padding-bottom:54px}   /* packs stand on the pedestal */
+.v3d-obj{position:relative;flex:none;width:var(--w);height:var(--h);transform-origin:50% 100%;transform-style:preserve-3d;
   transform:scale(var(--s,1)) rotateX(var(--rx,-10deg)) rotateY(var(--ry,-28deg))}
 .fc{position:absolute;left:0;top:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .fc img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
@@ -226,22 +236,45 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .v3d-obj.r .fc.front,.v3d-obj.r .fc.back{border-radius:16px 16px 10px 10px}
 .v3d-obj.r .fc.top,.v3d-obj.r .fc.bottom{border-radius:20px}
 /* generated back face when there is no photo of the back */
-.gen{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:14px;color:#fff;gap:6px}
-.gen small{font:700 11px Montserrat,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;opacity:.9}
-.gen b{font:400 26px/1.02 Anton,Impact,sans-serif;text-transform:uppercase}
-.gen span{font:600 12px Montserrat,Arial,sans-serif;opacity:.95}
-.gen em{margin-top:6px;font:700 10px Montserrat,Arial,sans-serif;font-style:normal;background:rgba(0,0,0,.18);padding:4px 8px;border-radius:10px}
-.v3d-shadow{position:absolute;left:50%;bottom:30px;width:56%;height:22px;transform:translateX(-50%);border-radius:50%;
-  background:radial-gradient(closest-side,rgba(60,35,10,.35),rgba(60,35,10,0));pointer-events:none}
-.v3d-nav{position:absolute;top:50%;width:44px;height:44px;margin-top:-22px;border-radius:50%;border:0;background:rgba(255,255,255,.92);
-  color:var(--navy-d);font:400 30px/40px Montserrat,Arial,sans-serif;box-shadow:0 4px 14px rgba(22,59,105,.18);cursor:pointer;z-index:2}
+.gen{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:12% 12% 8%;gap:8px;
+  background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,0) 40%,rgba(0,0,0,.12)),var(--c)}
+.gen .gl{background:#fff;border-radius:10px;padding:12px 12px 11px;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:0 3px 10px rgba(0,0,0,.18);max-width:100%}
+.gen .gl small{font:700 9px Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.gen .gl b{font:400 21px/1.02 Anton,Impact,sans-serif;text-transform:uppercase;color:var(--c)}
+.gen .gl span{font:700 11px Montserrat,Arial,sans-serif;color:var(--ink)}
+.gen .gl i{display:block;width:44px;height:3px;border-radius:2px;margin:4px 0 2px;background:linear-gradient(90deg,var(--navy) 0 30%,var(--orange) 30% 70%,var(--gold) 70%)}
+.gen .gl em{font:600 9.5px Montserrat,Arial,sans-serif;font-style:normal;color:var(--muted)}
+.gen p{margin:0;font:700 9px Montserrat,Arial,sans-serif;letter-spacing:.06em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.v3d-nav{position:absolute;top:50%;width:42px;height:42px;margin-top:-21px;border-radius:50%;border:1px solid rgba(242,201,140,.6);background:rgba(13,39,71,.55);
+  color:#fff;font:400 28px/38px Montserrat,Arial,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;z-index:4;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .v3d-nav.prev{left:10px}.v3d-nav.next{right:10px}
-.v3d-nav:focus-visible{outline:3px solid var(--sky)}
-.v3d-hint{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font:700 11px Montserrat,Arial,sans-serif;color:var(--orange-d);
-  background:rgba(255,255,255,.85);padding:4px 10px;border-radius:12px;pointer-events:none}
-.v3d-cap{text-align:center;padding:12px 8px 2px;touch-action:pan-y}
-.v3d-cap b{display:block;font:800 17px/1.25 Montserrat,Arial,sans-serif;color:var(--navy-d)}
-.v3d-cap span{display:block;margin-top:2px;font:600 13px Montserrat,Arial,sans-serif;color:var(--muted)}
+.v3d-nav:focus-visible{outline:3px solid var(--gold)}
+.v3d-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font:700 10.5px Montserrat,Arial,sans-serif;letter-spacing:.06em;color:var(--gold);
+  background:rgba(13,39,71,.6);padding:4px 11px;border-radius:12px;pointer-events:none;white-space:nowrap}
+.v3d-cap{text-align:center;padding:14px 8px 2px;touch-action:pan-y}
+.v3d-cap b{display:block;font:800 18px/1.25 Montserrat,Arial,sans-serif;color:var(--navy-d)}
+.v3d-cap > span{display:block;margin-top:2px;font:600 13px Montserrat,Arial,sans-serif;color:var(--muted)}
+.v3d-hooks{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px;min-height:26px}
+.v3d-hooks span{font:700 11.5px Montserrat,Arial,sans-serif;color:var(--navy-d);background:#fff;border:1px solid #d9e3ef;padding:5px 10px;border-radius:14px}
+.v3d-hooks span::before{content:"✓ ";color:var(--orange);font-weight:900}
+
+/* ---------- first screen: all products together ---------- */
+.hero.lineup{aspect-ratio:4/3;overflow:hidden;background:#0d2747}
+.lu-bg{position:absolute;inset:0;background:
+  radial-gradient(60% 55% at 50% 38%,rgba(255,255,255,.2),rgba(255,255,255,0) 70%),
+  linear-gradient(180deg,#2a62a0 0%,#1d4e89 52%,#163b69 74%,#0f2d52 74.2%,#123460 100%)}
+.lu-bg::after{content:"";position:absolute;left:0;right:0;top:74%;height:2px;background:linear-gradient(90deg,rgba(242,201,140,0),rgba(242,201,140,.7),rgba(242,201,140,0))}
+.lu-i{position:absolute;transform:translateX(-50%) rotate(var(--rot));filter:drop-shadow(0 12px 12px rgba(0,0,0,.4))}
+.lu-m{width:100%;height:100%;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.lu-m.box{border-radius:8px;overflow:hidden;filter:brightness(.92)}
+.lu-m img{width:100%;height:100%;object-fit:fill;display:block}
+.lu-cap{position:absolute;right:14px;top:16px;z-index:5;color:var(--gold);font:800 11px Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;
+  padding:6px 0;border-bottom:2px solid var(--gold)}
+.hero.lineup .badge{z-index:5}
+@media (prefers-reduced-motion:no-preference){
+  .lu-i{animation:luIn .8s var(--dl) cubic-bezier(.2,.8,.2,1) both}
+  @keyframes luIn{from{opacity:0;transform:translateX(-50%) translateY(22%) rotate(var(--rot))}to{opacity:1;transform:translateX(-50%) rotate(var(--rot))}}
+}
 .v3d-dots{display:flex;justify-content:center;gap:8px;padding:10px 0 2px}
 .v3d-dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:#d8cdbb;cursor:pointer;transition:width .25s,background .25s}
 .v3d-dots button[aria-current="true"]{width:26px;border-radius:6px;background:var(--orange)}
@@ -270,3 +303,8 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 .var .size{margin:3px 0 0;color:var(--muted);font-weight:600;font-size:13px}
 .var .size b{color:var(--orange-d)}
 .var .vd{margin:8px 0 0;font-size:14px}
+/* carton in the line-up: lid and side faces so it reads as a box, not a flat photo */
+.lu-i.boxi::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:16%;background:linear-gradient(180deg,#d9b27c,#c39661);transform:skewX(-38deg);transform-origin:0 100%;border-radius:4px 4px 0 0}
+.lu-i.boxi::after{content:"";position:absolute;left:100%;bottom:0;top:0;width:12.5%;background:linear-gradient(90deg,#9c7446,#87633b);transform:skewY(-52deg);transform-origin:0 0;border-radius:0 4px 4px 0}
+.lu-m.box{border-radius:3px}
+.v3d-obj.box{margin-bottom:34px}   /* deep cartons: lift so the front edge rests on the pedestal */

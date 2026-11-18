@@ -58,11 +58,22 @@ const FIRMS = {
     markets: ["Siay", "Kabasalan", "Imelda", "Zamboanga City", "Zamboanga del Sur", "Basilan", "Cebu City"],
     // 3D viewer. "cut" products are photos cut along the pack's real outline (photo + mask) and given
     // thickness by stacking the outline; boxes (the carton) keep flat faces. Sizes in px: w, h, depth d.
+    // Optional per product: price/priceLabel (price tag), ribbon (gold label), hooks (selling-point chips).
     products3d: [
       { name: "Calamansi Juice Drink with Honey", size: "200 ml stand-up pouch · turn it to see the nutrition facts",
-        cut: "pickers-pouch", back: "pickers-pouch-backphoto.jpg", w: 180, h: 268, d: 30, edge: "#1f7f26" },
-      { name: "Picker's Calamansi Juice Drink carton", size: "Shipping carton of pouches",
+        price: "₱13.00", priceLabel: "per pouch", ribbon: "Featured at NSTW 2026",
+        hooks: ["Rich in Vitamin C", "Real calamansi + honey", "Halal-certified"],
+        cut: "pickers-pouch", back: "pickers-pouch-backphoto.jpg", w: 180, h: 268, d: 18, edge: "#1f7f26" },
+      { name: "Picker's Calamansi Juice Drink carton", size: "Box of 10 pouches",
+        ribbon: "Order by the box", hooks: ["For events and resellers", "FDA-compliant"],
         front: "pickers-box-front.jpg", back: "pickers-box-front.jpg", w: 300, h: 140, d: 180, side: "linear-gradient(90deg,#b98c58,#cfa774,#b98c58)" }
+    ],
+    // First screen: all products together. cx = centre (% of width), b = bottom (%), h or w = size (%),
+    // ar = image width / height, rot = tilt in degrees.
+    lineup: [
+      { img: "pickers-box-front.jpg", cx: 31, b: 9, w: 56, ar: 620 / 289, z: 1 },
+      { cut: "pickers-pouch", cx: 86, b: 8, h: 56, ar: 460 / 685, rot: 6, z: 2 },
+      { cut: "pickers-pouch", cx: 64, b: 5, h: 70, ar: 460 / 685, z: 3 }
     ]
   },
 
@@ -125,11 +136,20 @@ const FIRMS = {
     markets: ["Zamboanga Peninsula (Region IX)", "Northern Mindanao (Region X)", "MIMAROPA (Region IV-B)"],
     products3d: [
       { name: "Diamond Noodles Pancit Canton", size: "200 g pack", cut: "dnf-canton",
-        w: 230, h: 248, d: 48, edge: "#3f9a2a", color: "#3a9a26" },
+        price: "₱45.00", priceLabel: "per pack", ribbon: "Featured at NSTW 2026",
+        hooks: ["Premium wheat flour", "Mas pina-sarap!", "For special occasions"],
+        w: 230, h: 248, d: 28, edge: "#3f9a2a", color: "#3a9a26" },
       { name: "Dried Pansit Special", size: "20 g pack", cut: "dnf-pansit",
-        w: 290, h: 174, d: 40, edge: "#e2672c", color: "#e86a2b" },
+        ribbon: "Deliciously different", hooks: ["Fine yellow noodles", "For pansit and noodle soups"],
+        w: 290, h: 174, d: 18, edge: "#e2672c", color: "#e86a2b" },
       { name: "Misua Special", size: "20 g pack", cut: "dnf-misua",
-        w: 290, h: 184, d: 40, edge: "#d61c7b", color: "#d61c7b" }
+        ribbon: "Quick to cook", hooks: ["Cooks in minutes", "Ideal for misua soup"],
+        w: 290, h: 184, d: 18, edge: "#d61c7b", color: "#d61c7b" }
+    ],
+    lineup: [
+      { cut: "dnf-pansit", cx: 24, b: 20, w: 46, ar: 520 / 311, rot: -8, z: 1 },
+      { cut: "dnf-misua", cx: 76, b: 20, w: 46, ar: 520 / 330, rot: 8, z: 1 },
+      { cut: "dnf-canton", cx: 50, b: 6, h: 66, ar: 440 / 475, z: 2 }
     ]
   }
 };
@@ -195,10 +215,10 @@ function renderFirm(key) {
 
   document.getElementById("app").innerHTML = `
   ${header()}
-  <div class="hero">
+  ${f.lineup ? lineupHTML(f) : `<div class="hero">
     <img class="photo" src="${IMG(f.hero)}" alt="${esc(f.name)} products" fetchpriority="high">
     <span class="badge">DOST-SETUP <b>Assisted Firm</b></span>
-  </div>
+  </div>`}
   <div class="titlewrap">
     <div class="title">
       <h1>${esc(f.name)}</h1>
@@ -266,11 +286,28 @@ function renderFirm(key) {
 
 /* ---------- 3D product viewer (pure CSS 3D, no library) ----------
    Packs are photos cut along their real outline with stacked thickness; the carton is a box. Drag to rotate; arrows, dots or swipe on the caption to change product. */
+/* First screen: every product of the firm together on a studio backdrop. */
+function lineupHTML(f) {
+  const items = f.lineup.map((it, i) => {
+    const size = it.h ? `height:${it.h}%` : `width:${it.w}%`;
+    const style = `left:${it.cx}%;bottom:${it.b}%;${size};aspect-ratio:${it.ar.toFixed(4)};z-index:${it.z || 1};--rot:${it.rot || 0}deg;--dl:${(0.08 + i * 0.12).toFixed(2)}s`;
+    const inner = it.cut
+      ? `<div class="lu-m" style="-webkit-mask-image:url(${IMG("3d/" + it.cut + "-mask.png")});mask-image:url(${IMG("3d/" + it.cut + "-mask.png")})"><img src="${IMG("3d/" + it.cut + "-photo.jpg")}" alt="" fetchpriority="${i === f.lineup.length - 1 ? "high" : "auto"}"></div>`
+      : `<div class="lu-m box"><img src="${IMG("3d/" + it.img)}" alt=""></div>`;
+    return `<div class="lu-i${it.cut ? "" : " boxi"}" style="${style}">${inner}</div>`;
+  }).join("");
+  return `<div class="hero lineup" role="img" aria-label="${esc(f.name)}: ${esc(f.products3d.map(p => p.name).join(", "))}">
+    <div class="lu-bg"></div>${items}
+    <span class="badge">DOST-SETUP <b>Assisted Firm</b></span>
+    <span class="lu-cap">Our products</span>
+  </div>`;
+}
+
 function viewer3dHTML(f) {
   // Solid cut-out: the outline is stacked in thin slices (darker toward the middle) so the edge
   // follows the pack's real shape; the photo sits on the front slice and the back on the rear one.
   const cutout = p => {
-    const mask = `url(${IMG("3d/" + p.cut + "-mask.png")})`, n = 14, out = [];
+    const mask = `url(${IMG("3d/" + p.cut + "-mask.png")})`, n = Math.max(12, Math.round(p.d / 1.2)), out = [];
     const m = `-webkit-mask-image:${mask};mask-image:${mask}`;
     for (let i = 1; i < n; i++) {
       const z = (i / n - 0.5) * p.d, shade = 0.55 + 0.25 * Math.abs(i / n - 0.5) * 2;
@@ -279,28 +316,32 @@ function viewer3dHTML(f) {
     const front = `<div class="sl face" style="${m};transform:translateZ(${p.d / 2}px)"><img src="${IMG("3d/" + p.cut + "-photo.jpg")}" alt="${esc(p.name)}" draggable="false" loading="lazy" decoding="async"></div>`;
     const back = p.back
       ? `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)"><img src="${IMG("3d/" + p.back)}" alt="${esc(p.name)} (back)" draggable="false" loading="lazy" decoding="async"></div>`
-      : `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)"><div class="gen" style="background:${p.color}"><small>${esc(f.name)}</small><b>${esc(p.name)}</b><span>${esc(p.size)}</span><em>DOST-SETUP assisted · NSTW 2026</em></div></div>`;
+      : `<div class="sl face bk" style="${m};transform:translateZ(${-p.d / 2}px)">${genBack(p)}</div>`;
     return out.join("") + front + back;
   };
   const faces = p => {
     if (p.cut) return cutout(p);
     const img = (file, alt) => `<img src="${IMG("3d/" + file)}" alt="${esc(alt)}" draggable="false" loading="lazy" decoding="async">`;
-    const back = p.back ? img(p.back, p.name + " (back)")
-      : `<div class="gen" style="background:${p.color}"><small>${esc(f.name)}</small><b>${esc(p.name)}</b><span>${esc(p.size)}</span><em>DOST-SETUP assisted · NSTW 2026</em></div>`;
+    const back = p.back ? img(p.back, p.name + " (back)") : genBack(p);
     const side = `style="background:${p.side}"`;
     return `<div class="fc front">${img(p.front, p.name)}</div><div class="fc back">${back}</div>
       <div class="fc right" ${side}></div><div class="fc left" ${side}></div><div class="fc top" ${side}></div><div class="fc bottom" ${side}></div>`;
   };
+  // Back of a pack we have no photo of: a clean label in the pack's own colour.
+  function genBack(p) {
+    return `<div class="gen" style="--c:${p.color}"><div class="gl"><small>${esc(f.name)}</small><b>${esc(p.name)}</b><span>${esc(p.size)}</span><i></i><em>Made in ${esc(f.location.split(", ").slice(-1)[0])}</em></div><p>DOST-SETUP assisted · NSTW 2026</p></div>`;
+  }
   const items = f.products3d;
+  const tags = p => `${p.ribbon ? `<span class="v3d-rib">${esc(p.ribbon)}</span>` : ""}${p.price ? `<span class="v3d-price"><small>${esc(p.priceLabel || "")}</small>${esc(p.price)}</span>` : ""}`;
   return `<section class="v3d" aria-label="Products in 3D">
     <h2>Products in 3D</h2>
     <div class="v3d-stage" id="v3dStage" tabindex="0" aria-label="3D product viewer. Drag to rotate, use the arrow keys to change product.">
-      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}"><div class="v3d-obj${p.round ? " r" : ""}${p.cut ? " cut" : ""}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
-      <div class="v3d-shadow"></div>
+      <div class="v3d-pedestal"></div>
+      ${items.map((p, i) => `<div class="v3d-slide${i ? " right" : " on"}" data-i="${i}">${tags(p)}<div class="v3d-obj${p.round ? " r" : ""}${p.cut ? " cut" : " box"}" style="--w:${p.w}px;--h:${p.h}px;--d:${p.d}px">${faces(p)}</div></div>`).join("")}
       ${items.length > 1 ? `<button class="v3d-nav prev" type="button" aria-label="Previous product">&#8249;</button><button class="v3d-nav next" type="button" aria-label="Next product">&#8250;</button>` : ""}
       <div class="v3d-hint">&#8634; Drag to rotate</div>
     </div>
-    <div class="v3d-cap" id="v3dCap"><b id="v3dName"></b><span id="v3dSize"></span></div>
+    <div class="v3d-cap" id="v3dCap"><b id="v3dName"></b><span id="v3dSize"></span><div class="v3d-hooks" id="v3dHooks"></div></div>
     ${items.length > 1 ? `<div class="v3d-dots">${items.map((p, i) => `<button type="button" aria-label="Show ${esc(p.name)}" data-i="${i}"></button>`).join("")}</div>` : ""}
   </section>`;
 }
@@ -309,27 +350,28 @@ function init3D(f) {
   const stage = document.getElementById("v3dStage"); if (!stage) return;
   const slides = [...stage.querySelectorAll(".v3d-slide")], dots = [...document.querySelectorAll(".v3d-dots button")];
   const items = f.products3d, auto = MOTION_OK;
-  let idx = 0, rx = -10, ry = -28, vx = 0, vy = 0, drag = null, last = 0, visible = true, raf = 0, target = null;
+  let idx = 0, rx = -10, ry = -28, vx = 0, vy = 0, drag = null, last = 0, visible = true, raf = 0, target = null, swaying = false;
 
   const fit = () => slides.forEach((s, i) => {          // shrink large packs to fit small phone screens
-    const p = items[i], k = Math.min(1, stage.clientWidth * 0.6 / p.w, stage.clientHeight * 0.62 / p.h);
-    s.firstElementChild.style.setProperty("--s", k.toFixed(3));
+    const p = items[i], k = Math.min(1, stage.clientWidth * 0.64 / p.w, stage.clientHeight * 0.52 / p.h);
+    s.querySelector(".v3d-obj").style.setProperty("--s", k.toFixed(3));
   });
-  const apply = () => { const o = slides[idx].firstElementChild; o.style.setProperty("--rx", rx.toFixed(1) + "deg"); o.style.setProperty("--ry", ry.toFixed(1) + "deg"); };
+  const apply = () => { const o = slides[idx].querySelector(".v3d-obj"); o.style.setProperty("--rx", rx.toFixed(1) + "deg"); o.style.setProperty("--ry", ry.toFixed(1) + "deg"); };
   const go = n => {
     const prev = idx; idx = (n + items.length) % items.length;
     slides.forEach((s, i) => { s.classList.toggle("on", i === idx); s.classList.toggle("left", i !== idx && (i < idx)); s.classList.toggle("right", i !== idx && i > idx); });
     dots.forEach((d, i) => d.setAttribute("aria-current", i === idx ? "true" : "false"));
     document.getElementById("v3dName").textContent = items[idx].name;
     document.getElementById("v3dSize").textContent = items[idx].size;
+    document.getElementById("v3dHooks").innerHTML = (items[idx].hooks || []).map(h => `<span>${esc(h)}</span>`).join("");
     // welcome spin: one full turn that settles with the front facing the viewer
-    vx = vy = 0; rx = -10; ry = (auto && prev !== idx) ? -28 - 360 : -28; target = (auto && prev !== idx) ? -28 : null;
+    vx = vy = 0; swaying = false; rx = -10; ry = (auto && prev !== idx) ? -28 - 360 : -28; target = (auto && prev !== idx) ? -28 : null;
     last = performance.now(); apply();
   };
 
   stage.addEventListener("pointerdown", e => {
     if (e.target.closest("button")) return;
-    drag = { x: e.clientX, y: e.clientY }; vx = vy = 0; target = null; stage.setPointerCapture(e.pointerId); stage.classList.add("grab");
+    drag = { x: e.clientX, y: e.clientY }; vx = vy = 0; target = null; swaying = false; stage.setPointerCapture(e.pointerId); stage.classList.add("grab");
   });
   stage.addEventListener("pointermove", e => {
     if (!drag) return;
@@ -356,7 +398,11 @@ function init3D(f) {
       ry += (target - ry) * 0.07; if (Math.abs(target - ry) < 0.4) { ry = target; target = null; last = now; } apply();
     } else if (!drag) {
       if (Math.abs(vx) > 0.05 || Math.abs(vy) > 0.05) { ry += vx; rx = Math.max(-45, Math.min(45, rx + vy)); vx *= 0.93; vy *= 0.9; apply(); }
-      else if (auto && now - last > 2500) { ry += 0.35; rx += (-10 - rx) * 0.02; apply(); }
+      // at rest: a slow, gentle sway around the front view (formal turntable) instead of a full spin
+      else if (auto && now - last > 2500) {
+        if (!swaying) { ry = ((ry + 180) % 360 + 360) % 360 - 180; swaying = true; }
+        ry += ((-20 + 24 * Math.sin(now / 1700)) - ry) * 0.035; rx += (-8 - rx) * 0.03; apply();
+      }
     }
     raf = visible ? requestAnimationFrame(tick) : 0;
   };

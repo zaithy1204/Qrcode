@@ -545,3 +545,19 @@ function renderIndex() {
     <section>${cards}</section>${footer()}`;
   animate();
 }
+
+/* Keeps the firm label and "Our products" on one line: on narrow phones the label's
+   text shrinks just enough to fit (never below 7 px; if still too long the row wraps). */
+function fitOvHead() {
+  document.querySelectorAll(".ov-head").forEach(h => {
+    const b = h.querySelector(".badge"), c = h.querySelector(".ov-cap");
+    if (!b || !c) return;
+    b.style.fontSize = "";
+    let fs = parseFloat(getComputedStyle(b).fontSize);
+    while (fs > 7 && c.offsetTop > b.offsetTop + 2) { fs -= 0.25; b.style.fontSize = fs + "px"; }
+  });
+}
+addEventListener("resize", fitOvHead);
+addEventListener("load", fitOvHead);
+if (document.fonts) document.fonts.ready.then(fitOvHead);
+setTimeout(fitOvHead, 0);

@@ -11,6 +11,7 @@ const FIRMS = {
     owners: "Carlito A. Cariño, Jr. & Cherry Mae C. Cariño",
     phones: ["0906-561-5694", "0917-825-2692"],
     email: "pickers.calamansi@gmail.com",
+    program: "DOST-SETUP/iFWD PH",
     hero: "pickers-juice.jpg",
     featured: {
       name: "Calamansi Juice Drink with Honey",
@@ -84,6 +85,7 @@ const FIRMS = {
     owners: "Lucia B. Coca (Founder) · Christine Jane C. Coca-Roque (General Manager)",
     phones: ["0935-184-4335"],
     email: "",
+    program: "DOST-SETUP",
     hero: "dnf-pansit.jpg",
     featured: {
       name: "Diamond Noodles Pancit Canton",
@@ -218,7 +220,7 @@ function renderFirm(key) {
   ${header()}
   ${f.overview || f.banner ? overviewHTML(f) : `<div class="hero">
     <img class="photo" src="${IMG(f.hero)}" alt="${esc(f.name)} products" fetchpriority="high">
-    <span class="badge">DOST-SETUP <b>Assisted Firm</b></span>
+    <span class="badge"><span style="text-transform:none">${esc(f.program||"DOST-SETUP")}</span> <b>Assisted Firm</b></span>
   </div>`}
   <div class="titlewrap">
     <div class="title">
@@ -292,13 +294,13 @@ function renderFirm(key) {
 /* First screen: a neat overview of the firm's products. The first photo is the large tile. */
 function overviewHTML(f) {
   if (f.banner) return `<div class="hero overview">
-    <div class="ov-head"><span class="badge">DOST-SETUP <b>Assisted Firm</b></span><span class="ov-cap">Our products</span></div>
+    <div class="ov-head"><span class="badge"><span style="text-transform:none">${esc(f.program||"DOST-SETUP")}</span> <b>Assisted Firm</b></span><span class="ov-cap">Our products</span></div>
     <img class="ov-banner" src="${IMG(f.banner)}" alt="${esc(f.name)}: ${esc(f.products3d.map(p => p.name).join(", "))}" fetchpriority="high">
   </div>`;
   const tile = (it, i) => `<figure class="ov-t${i ? "" : " big"}"><img src="${IMG(it.img)}" alt="${esc(it.name)}"${i ? '' : ' fetchpriority="high"'}>
       ${it.price ? `<span class="ov-price">${esc(it.price)}</span>` : ""}<figcaption>${esc(it.name)}</figcaption></figure>`;
   return `<div class="hero overview">
-    <div class="ov-head"><span class="badge">DOST-SETUP <b>Assisted Firm</b></span><span class="ov-cap">Our products</span></div>
+    <div class="ov-head"><span class="badge"><span style="text-transform:none">${esc(f.program||"DOST-SETUP")}</span> <b>Assisted Firm</b></span><span class="ov-cap">Our products</span></div>
     <div class="ov-grid">${f.overview.map(tile).join("")}</div>
   </div>`;
 }
@@ -526,7 +528,7 @@ function saveContact(f) {
   const v = ["BEGIN:VCARD", "VERSION:3.0", `FN:${f.name}`, `ORG:${f.name}`,
     ...f.phones.map(p => `TEL;TYPE=CELL:${p.replace(/[^0-9+]/g, "")}`),
     f.email ? `EMAIL:${f.email}` : "", `ADR;TYPE=WORK:;;${f.address};;;;Philippines`,
-    `NOTE:${f.featured.name} - DOST-SETUP assisted firm (NSTW 2026)`, `URL:${location.href}`, "END:VCARD"].filter(Boolean).join("\r\n");
+    `NOTE:${f.featured.name} - ${f.program||"DOST-SETUP"} assisted firm (NSTW 2026)`, `URL:${location.href}`, "END:VCARD"].filter(Boolean).join("\r\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([v], { type: "text/vcard" }));
   a.download = f.name.replace(/[^A-Za-z0-9]+/g, "-") + ".vcf";

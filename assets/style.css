@@ -286,9 +286,9 @@ footer .ev{font-weight:800;color:var(--navy-d)}
 
 /* ---------- first screen: neat overview of the products ---------- */
 .hero.overview{padding:14px 14px 16px;background:linear-gradient(180deg,#ffffff 0%,#f4f7fb 60%,#e9eef5 100%)}
-.ov-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.ov-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 10px;margin-bottom:12px}
 .hero.overview .badge{position:static;padding:6px 11px;font-size:10.5px}
-.ov-cap{color:var(--orange-d);font:800 11px Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid var(--orange)}
+.ov-cap{color:var(--orange-d);margin-left:auto;font:800 11px Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid var(--orange)}
 .ov-grid{display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:1fr 1fr;gap:10px;aspect-ratio:4/3.1}
 .ov-t{position:relative;margin:0;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 8px 20px rgba(22,59,105,.16);border:1px solid #e3e9f1}
 .ov-t.big{grid-row:1 / span 2}
